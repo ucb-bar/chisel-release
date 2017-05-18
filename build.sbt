@@ -4,7 +4,7 @@ import chiselBuild.ChiselDependencies
 
 site.settings
 
-lazy val root = (project in file (".")).
+lazy val chisel_release = (project in file (".")).
   settings(
     publishLocal := {},
     publish := {},
@@ -12,6 +12,6 @@ lazy val root = (project in file (".")).
   ).
   aggregate(ChiselDependencies.packageProjectsMap.values.toSeq: _*)
 
-publishArtifact in root := false
+publishArtifact in chisel_release := false
 
-publish in root := {}
+publish in chisel_release := {}
