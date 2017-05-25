@@ -16,7 +16,7 @@ EOF
 }
 
 # Set default suffix
-versionSuffix=`date +%Y-%m-%d`
+versionSuffix=_`date +%Y-%m-%d`
 version=""
 if [[ $# == 0 ]]; then
 usage
