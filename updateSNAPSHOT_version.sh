@@ -22,7 +22,8 @@ if [[ $# == 0 ]]; then
 usage
 exit 1
 fi
-while [[ $# -gt 1 || $1 =~ -.* ]]
+# While we have switches (a word with a leading "-") ...
+while [[ $# -gt 1 && ${1#-} != ${1} ]]
 do
 opt="$1"
 case $opt in
