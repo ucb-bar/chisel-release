@@ -19,7 +19,8 @@ lazy val publishSettings = Seq (
   publishArtifact in Test := false,
   pomIncludeRepository := { x => false },
 
-  publishTo <<= version { v: String =>
+  publishTo := {
+    val v = version.value
     val nexus = "https://oss.sonatype.org/"
     if (v.trim.endsWith("SNAPSHOT")) {
       Some("snapshots" at nexus + "content/repositories/snapshots")
