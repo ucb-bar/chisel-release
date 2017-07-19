@@ -6,7 +6,7 @@ SBT=sbt
 #  so the results are available to later submodules.
 EXPLICIT_SUBMODULES=firrtl firrtl-interpreter chisel3 chisel-testers
 define doSBT
-	for c in $(EXPLICIT_SUBMODULES); do ( echo $$c && cd $$c && $(SBT) $(1) publish-local ); done
+	for c in $(EXPLICIT_SUBMODULES); do ( echo $$c && cd $$c && $(SBT) $(1) publish-local ) || exit 1; done
 endef
 
 default compile:
