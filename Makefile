@@ -14,10 +14,10 @@ coverage:
 test:
 	$(SBT) test
 
-publish-local:
-	$(SBT) publish-local
+publishLocal publish-local:
+	$(SBT) publishLocal
 
 .DEFAULT:
 	$(SBT) $@
 
-.PHONY: clean compile default test publish-local
+.PHONY: clean compile default test publish-local publishLocal
