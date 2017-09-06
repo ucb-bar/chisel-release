@@ -10,3 +10,6 @@
 [submodule "firrtl-interpreter"]
 	path = firrtl-interpreter
 	url = https://github.com/freechipsproject/firrtl-interpreter.git
+[submodule "dsptools"]
+	path = dsptools
+	url = git@github.com:ucb-bar/dsptools.git
