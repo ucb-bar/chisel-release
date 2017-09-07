@@ -6,7 +6,8 @@ val chiselDeps = chisel.dependencies(Seq(
     ("edu.berkeley.cs" %% "firrtl" % "1.1-SNAPSHOT", "firrtl"),
     ("edu.berkeley.cs" %% "firrtl-interpreter" % "1.1-SNAPSHOT", "firrtl-interpreter"),
     ("edu.berkeley.cs" %% "chisel3" % "3.1-SNAPSHOT", "chisel3"),
-    ("edu.berkeley.cs" %% "chisel-iotesters" % "1.2-SNAPSHOT", "chisel-testers")
+    ("edu.berkeley.cs" %% "chisel-iotesters" % "1.2-SNAPSHOT", "chisel-testers"),
+    ("edu.berkeley.cs" %% "dsptools" % "1.1-SNAPSHOT", "dsptools")
 ))
 lazy val chisel_release = (project in file (".")).
   settings(
