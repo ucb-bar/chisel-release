@@ -4,7 +4,7 @@ SBT=sbt
 #  the true project/submodule dependencies, we need to execute sbt commands
 #  in a specific directory order and do a publish-local at the end
 #  so the results are available to later submodules.
-EXPLICIT_SUBMODULES=firrtl firrtl-interpreter chisel3 chisel-testers
+EXPLICIT_SUBMODULES=firrtl firrtl-interpreter chisel3 chisel-testers dsptools
 # The following targets need a publish-local so their results are available.
 NEED_PUBLISHING = compile test
 
