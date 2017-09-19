@@ -1,8 +1,6 @@
 // See LICENSE for license details.
 
-scalaVersion := "2.11.11"
-
-crossScalaVersions := Seq("2.11.11", "2.12.3")
+ChiselProjectDependenciesPlugin.chiselProjectSettings
 
 // Provide a managed dependency on X if -DXVersion="" is supplied on the command line.
 val defaultVersions = Map(
@@ -26,6 +24,7 @@ val chiselDeps = chisel.dependencies(Seq(
     ("edu.berkeley.cs" %% "chisel-iotesters" % chiselVersion("chisel-iotesters"), "chisel-testers"),
     ("edu.berkeley.cs" %% "dsptools" % chiselVersion("dsptools"), "dsptools")
 ))
+
 lazy val chisel_release = (project in file (".")).
   settings(
     publishLocal := {},
