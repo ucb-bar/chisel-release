@@ -1,17 +1,55 @@
 // See LICENSE for license details.
 
-site.settings
+//enablePlugins(SiteScaladocPlugin)
+
+//enablePlugins(GhpagesPlugin)
+
+def scalacOptionsVersion(scalaVersion: String): Seq[String] = {
+  Seq() ++ {
+    // If we're building with Scala > 2.11, enable the compile option
+    //  switch to support our anonymous Bundle definitions:
+    //  https://github.com/scala/bug/issues/10047
+    CrossVersion.partialVersion(scalaVersion) match {
+      case Some((2, scalaMajor: Int)) if scalaMajor < 12 => Seq()
+      case _ => Seq("-Xsource:2.11")
+    }
+  }
+}
+
+def javacOptionsVersion(scalaVersion: String): Seq[String] = {
+  Seq() ++ {
+    // Scala 2.12 requires Java 8. We continue to generate
+    //  Java 7 compatible code for Scala 2.11
+    //  for compatibility with old clients.
+    CrossVersion.partialVersion(scalaVersion) match {
+      case Some((2, scalaMajor: Int)) if scalaMajor < 12 =>
+        Seq("-source", "1.7", "-target", "1.7")
+      case _ =>
+        Seq("-source", "1.8", "-target", "1.8")
+    }
+  }
+}
+
+scalaVersion := "2.11.11"
+
+crossScalaVersions := Seq("2.11.11", "2.12.3")
+
+scalacOptions := Seq("-deprecation", "-feature") ++ scalacOptionsVersion(scalaVersion.value)
+
+javacOptions ++= javacOptionsVersion(scalaVersion.value)
 
 lazy val commonSettings = Seq (
   organization := "edu.berkeley.cs",
-  scalaVersion := "2.11.8",
+  scalaVersion := "2.11.11",
 
   resolvers ++= Seq(
     Resolver.sonatypeRepo("snapshots"),
     Resolver.sonatypeRepo("releases")
   ),
 
-  javacOptions ++= Seq("-source", "1.7", "-target", "1.7")
+  // Shouldn't sbt-coverage do this?
+  // If we don't, we get:
+  coverageEnabled := (coverageEnabled in ThisBuild).value
 )
 
 lazy val publishSettings = Seq (
@@ -50,18 +88,15 @@ lazy val firrtl_interpreter = (project in file("firrtl-interpreter")).
   settings(publishSettings: _*).
   dependsOn(firrtl)
 
-lazy val root = (project in file (".")).
+lazy val chisel_release = (project in file (".")).
   settings(commonSettings: _*).
   settings(
     publishLocal := {},
     publish := {},
+    publishArtifact := false,
     packagedArtifacts := Map.empty
   ).
   dependsOn(firrtl).
   aggregate(firrtl, chisel, firrtl_interpreter, chisel_testers)
 
 buildInfoUsePackageAsPath := true
-
-publishArtifact in root := false
-
-publish in root := {}

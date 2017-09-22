@@ -20,20 +20,20 @@ default compile:
 	$(call doSBT,compile)
 
 clean:
-	$(call doSBT,clean)
+	$(SBT) clean
 	find . -depth -type d \( -name target -o -name test_run_dir \) -execdir echo rm -rf {}"/*" \;
 
 coverage:
-	$(call doSBT,clean coverage test)
-	$(call doSBT,coverageReport)
+	$(call doSBT, clean coverage test)
+	$(SBT) coverageReport coverageAggregate
 
 test:
 	$(call doSBT,test)
 
-publish-local:
-	$(call doSBT,publish-local)
+publish-local publishLocal:
+	$(call doSBT,publishLocal)
 
 .DEFAULT:
 	$(call doSBT,$@)
 
-.PHONY: clean compile default test publish-local
+.PHONY: clean compile default test publish-local publishLocal
