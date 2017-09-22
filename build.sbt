@@ -2,6 +2,8 @@
 
 ChiselProjectDependenciesPlugin.chiselProjectSettings
 
+buildInfoUsePackageAsPath := true
+
 // Provide a managed dependency on X if -DXVersion="" is supplied on the command line.
 val defaultVersions = Map(
   "firrtl" -> "1.1-SNAPSHOT",
@@ -29,10 +31,14 @@ lazy val chisel_release = (project in file (".")).
   settings(
     publishLocal := {},
     publish := {},
+    publishArtifact := false,
     packagedArtifacts := Map.empty
   ).
   aggregate(chiselDeps.projects: _*)
 
-publishArtifact in chisel_release := false
-
-publish in chisel_release := {}
+// Shouldn't sbt-coverage do this?
+// If we don't, we get:
+//  [warn] No coverage data, skipping reports
+chiselDeps.projects map { proj =>
+  coverageEnabled in proj := (coverageEnabled in ThisBuild).value
+}

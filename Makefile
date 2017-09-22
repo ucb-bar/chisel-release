@@ -9,7 +9,7 @@ clean:
 
 coverage:
 	$(SBT) clean coverage test
-	$(SBT) coverageReport
+	$(SBT) coverageReport coverageAggregate
 
 test:
 	$(SBT) test
