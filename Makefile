@@ -4,7 +4,7 @@ SBT=sbt
 #  the true project/submodule dependencies, we need to execute sbt commands
 #  in a specific directory order and do a publish-local at the end
 #  so the results are available to later submodules.
-EXPLICIT_SUBMODULES=firrtl firrtl-interpreter chisel3 chisel-testers
+EXPLICIT_SUBMODULES=firrtl firrtl-interpreter chisel3 chisel-testers dsptools
 # The following targets need a publish-local so their results are available.
 NEED_PUBLISHING = compile test
 
@@ -20,20 +20,20 @@ default compile:
 	$(call doSBT,compile)
 
 clean:
-	$(call doSBT,clean)
+	$(SBT) clean
 	find . -depth -type d \( -name target -o -name test_run_dir \) -execdir echo rm -rf {}"/*" \;
 
 coverage:
-	$(call doSBT,clean coverage test)
-	$(call doSBT,coverageReport)
+	$(call doSBT, clean coverage test)
+	$(SBT) coverageReport coverageAggregate
 
 test:
 	$(call doSBT,test)
 
-publish-local:
-	$(call doSBT,publish-local)
+publish-local publishLocal:
+	$(call doSBT,publishLocal)
 
 .DEFAULT:
 	$(call doSBT,$@)
 
-.PHONY: clean compile default test publish-local
+.PHONY: clean compile default test publish-local publishLocal
