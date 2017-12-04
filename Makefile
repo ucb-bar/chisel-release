@@ -3,16 +3,13 @@ SBT=sbt
 default compile:
 	$(SBT) compile
 
-clean:
-	$(SBT) clean
+clean +clean:
+	$(SBT) $@
 	find . -depth -type d \( -name target -o -name test_run_dir \) -execdir echo rm -rf {}"/*" \;
 
 coverage:
 	$(SBT) clean coverage test
 	$(SBT) coverageReport coverageAggregate
-
-test:
-	$(SBT) test
 
 publishLocal publish-local:
 	$(SBT) publishLocal
@@ -20,4 +17,4 @@ publishLocal publish-local:
 .DEFAULT:
 	$(SBT) $@
 
-.PHONY: clean compile default test publish-local publishLocal
+.PHONY: clean +clean compile coverage default publish-local publishLocal
