@@ -9,7 +9,7 @@ EXPLICIT_SUBMODULES=firrtl firrtl-interpreter chisel3 chisel-testers dsptools
 NEED_PUBLISHING = compile test +compile +test
 
 # The argument, $(1) is the list of sbt commands to execute.
-# Set a Make variable with "publishLocal" if we need add publishLocal
+# Set a Make variable with "publishLocal" if we need to add publishLocal
 #  to the sbt command list.
 define doSBT
 $(eval publishlocal=$(if $(filter $(NEED_PUBLISHING),$(1)),$(if $(findstring +,$(1)),+publishLocal,publishLocal)))
