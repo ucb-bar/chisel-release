@@ -30,13 +30,9 @@ def javacOptionsVersion(scalaVersion: String): Seq[String] = {
   }
 }
 
-<<<<<<< Updated upstream
-scalaVersion := "2.11.11"
-=======
-scalaVersion := "2.12.4"
->>>>>>> Stashed changes
+scalaVersion := "2.11.12"
 
-crossScalaVersions := Seq("2.11.11", "2.12.3")
+crossScalaVersions := Seq("2.11.12", "2.12.4")
 
 scalacOptions := Seq("-deprecation", "-feature") ++ scalacOptionsVersion(scalaVersion.value)
 
