@@ -5,10 +5,6 @@ ChiselProjectDependenciesPlugin.chiselProjectSettings
 buildInfoUsePackageAsPath := true
 //enablePlugins(GhpagesPlugin)
 
-scalaVersion := "2.11.12"
-
-crossScalaVersions := Seq("2.11.12", "2.12.4")
-
 // Provide a managed dependency on X if -DXVersion="" is supplied on the command line.
 val defaultVersions = Map(
   "firrtl" -> "1.1-SNAPSHOT",
@@ -26,9 +22,9 @@ def chiselVersion(proj: String): String = {
 // This could be any (or all) of the BIG4 projects
 val chiselDeps = chisel.dependencies(Seq(
     ("edu.berkeley.cs" %% "firrtl" % chiselVersion("firrtl"), "firrtl"),
-    ("edu.berkeley.cs" %% "firrtl-interpreter" % chiselVersion("firrtl-interpreter"), "firrtl-interpreter"),
+    ("edu.berkeley.cs" %% "firrtl-interpreter" % chiselVersion("firrtl-interpreter"), "firrtl-interpreter", Some("firrtl_interpreter")),
     ("edu.berkeley.cs" %% "chisel3" % chiselVersion("chisel3"), "chisel3"),
-    ("edu.berkeley.cs" %% "chisel-iotesters" % chiselVersion("chisel-iotesters"), "chisel-testers"),
+    ("edu.berkeley.cs" %% "chisel-iotesters" % chiselVersion("chisel-iotesters"), "chisel-testers", Some("chisel_iotesters")),
     ("edu.berkeley.cs" %% "dsptools" % chiselVersion("dsptools"), "dsptools")
 ))
 
@@ -47,3 +43,4 @@ lazy val chisel_release = (project in file (".")).
 chiselDeps.projects map { proj =>
   coverageEnabled in proj := (coverageEnabled in ThisBuild).value
 }
+
