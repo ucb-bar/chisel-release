@@ -2,6 +2,8 @@
 
 ChiselProjectDependenciesPlugin.chiselProjectSettings
 
+scalaVersion := "2.11.12"
+
 buildInfoUsePackageAsPath := true
 //enablePlugins(GhpagesPlugin)
 
