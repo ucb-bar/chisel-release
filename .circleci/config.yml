@@ -23,6 +23,10 @@ jobs:
     
     steps:
       - checkout
+        post:
+          - git submodule sync
+          - git submodule update --init --recursive
+
 
       # Download and cache dependencies
       - restore_cache:
