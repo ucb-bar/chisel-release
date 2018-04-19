@@ -3,10 +3,6 @@
 # Check https://circleci.com/docs/2.0/sample-config/ for more details
 #
 version: 2
-general:
-  branches:
-    only:
-     - master # list of branches to build
 
 jobs:
   build:
