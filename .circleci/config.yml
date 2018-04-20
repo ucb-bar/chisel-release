@@ -24,7 +24,8 @@ jobs:
 #      TERM: dumb
     
     steps:
-      - run:          command: |
+      - run:
+          command: |
             sudo apt-get update
             sudo apt-get install openjdk-8-jdk
             sudo apt-get install apt-transport-https
@@ -74,7 +75,8 @@ jobs:
 #      TERM: dumb
         
     steps:
-      - run:          command: |
+      - run:
+          command: |
             sudo apt-get update
             sudo apt-get install openjdk-8-jdk
             sudo apt-get install apt-transport-https
