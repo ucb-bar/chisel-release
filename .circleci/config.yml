@@ -44,7 +44,7 @@ jobs:
             - ~/repo
           key: v1-dependencies--{{ checksum "build.sbt" }}
 
-test:
+  test:
     docker:
       # specify the version you desire here
       - image: circleci/openjdk:8-jdk
