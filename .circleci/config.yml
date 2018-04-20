@@ -17,10 +17,10 @@ jobs:
 
     working_directory: ~/repo
 
-    environment:
-      # Customize the JVM maximum heap limit
-      JVM_OPTS: -Xmx1024m
-      TERM: dumb
+#    environment:
+#      # Customize the JVM maximum heap limit
+#      JVM_OPTS: -Xmx1024m
+#      TERM: dumb
     
     steps:
       - checkout
@@ -56,10 +56,10 @@ test:
 
     working_directory: ~/repo
 
-    environment:
-      # Customize the JVM maximum heap limit
-      JVM_OPTS: -Xmx1024m
-      TERM: dumb
+#    environment:
+#      # Customize the JVM maximum heap limit
+#      JVM_OPTS: -Xmx1024m
+#      TERM: dumb
         
     steps:
       - restore_cache:
