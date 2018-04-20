@@ -24,28 +24,28 @@ jobs:
 #      TERM: dumb
     
     steps:
-      - run:
-          command: |
+      - run:          command: |
             sudo apt-get update
             sudo apt-get install openjdk-8-jdk
             sudo apt-get install apt-transport-https
+            sudo apt-get install graphviz
             echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
             sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823
             sudo apt-get update
             sudo apt-get install sbt
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+
       - checkout
       - run:
           command: |
             git submodule sync
             git submodule update --init --recursive
-
-
-      # Download and cache dependencies
-#      - restore_cache:
-#          keys:
-#          - v1-dependencies-{{ checksum "build.sbt" }}
-#          # fallback to using the latest cache if no exact match is found
-#          - v1-dependencies-
 
       - run: make +clean +compile
 
@@ -53,18 +53,18 @@ jobs:
           paths:
             - ~/.ivy2
             - ~/repo
-          key: v1-dependencies--{{ checksum "build.sbt" }}
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
 
   test:
     docker:
       # specify the version you desire here
-      - image: circleci/openjdk:8-jdk
+#      - image: circleci/openjdk:8-jdk
+      - image: circleci/buildpack-deps
       
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/postgres:9.4
-      - image: circleci/buildpack-deps
 
     working_directory: ~/repo
 
@@ -74,8 +74,21 @@ jobs:
 #      TERM: dumb
         
     steps:
+      - run:          command: |
+            sudo apt-get update
+            sudo apt-get install openjdk-8-jdk
+            sudo apt-get install apt-transport-https
+            sudo apt-get install graphviz
+            echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+            sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823
+            sudo apt-get update
+            sudo apt-get install sbt
+
       - restore_cache:
-          key: v1-dependencies--{{ checksum "build.sbt" }}
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
       # run tests!
       - run: make +test
 
