@@ -9,7 +9,7 @@ jobs:
     docker:
       # specify the version you desire here
       - image: ucbjrl/chisel3-ci
-        user: chisel
+        user: "chisel"
 #        environment:
 #          PATH: "/opt/verilator/verilator_3_904/bin:$PATH"
 
@@ -42,7 +42,7 @@ jobs:
     docker:
       # specify the version you desire here
       - image: ucbjrl/chisel3-ci
-        user: chisel
+        user: "chisel"
 #        environment:
 #          PATH: "/opt/verilator/verilator_3_904/bin:$PATH"
 
