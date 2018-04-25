@@ -9,12 +9,12 @@ jobs:
     docker:
       # specify the version you desire here
       - image: ucbjrl/chisel3-ci
-      - user: chisel
+        user: chisel
+        environment:
+          PATH: "/opt/verilator/verilator_3_904/bin:$PATH"
+
     working_directory: ~/src/chisel-release
 
-    environment:
-      - PATH: "/opt/verilator/verilator_3_904/bin:$PATH"
-      
     steps:
       # Download and cache dependencies
       - restore_cache:
@@ -42,12 +42,11 @@ jobs:
     docker:
       # specify the version you desire here
       - image: ucbjrl/chisel3-ci
-      - user: chisel
+        user: chisel
+        environment:
+          PATH: "/opt/verilator/verilator_3_904/bin:$PATH"
 
     working_directory: ~/src/chisel-release
-
-    environment:
-      - PATH: "/opt/verilator/verilator_3_904/bin:$PATH"
         
     steps:
       - run: make +test
