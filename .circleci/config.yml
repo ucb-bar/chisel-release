@@ -10,8 +10,8 @@ jobs:
       # specify the version you desire here
       - image: ucbjrl/chisel3-ci
         user: chisel
-        environment:
-          PATH: "/opt/verilator/verilator_3_904/bin:$PATH"
+#        environment:
+#          PATH: "/opt/verilator/verilator_3_904/bin:$PATH"
 
     working_directory: ~/src/chisel-release
 
@@ -43,13 +43,15 @@ jobs:
       # specify the version you desire here
       - image: ucbjrl/chisel3-ci
         user: chisel
-        environment:
-          PATH: "/opt/verilator/verilator_3_904/bin:$PATH"
+#        environment:
+#          PATH: "/opt/verilator/verilator_3_904/bin:$PATH"
 
     working_directory: ~/src/chisel-release
         
     steps:
-      - run: make +test
+      - run:
+          command: |
+           PATH="/opt/verilator/verilator_3_904/bin:$PATH" make +test
 
 workflows:
   version: 2
