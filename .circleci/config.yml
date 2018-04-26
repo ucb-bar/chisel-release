@@ -7,13 +7,10 @@ version: 2
 jobs:
   build:
     docker:
-      # specify the version you desire here
       - image: ucbjrl/chisel3-ci
         user: "chisel"
-#        environment:
-#          PATH: "/opt/verilator/verilator_3_904/bin:$PATH"
 
-    working_directory: /home/chisel/src/chisel-release
+    working_directory: ~/src/chisel-release
 
     steps:
       # Download and cache dependencies
@@ -26,8 +23,6 @@ jobs:
       - checkout
       - run:
           command: |
-            pwd
-            whoami
             git submodule sync
             git submodule update --init --recursive
 
@@ -45,15 +40,19 @@ jobs:
       # specify the version you desire here
       - image: ucbjrl/chisel3-ci
         user: "chisel"
-#        environment:
-#          PATH: "/opt/verilator/verilator_3_904/bin:$PATH"
 
     working_directory: ~/src/chisel-release
         
     steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
       - run:
           command: |
-           PATH="/opt/verilator/verilator_3_904/bin:$PATH" make +test
+            PATH="/opt/verilator/verilator_3_904/bin:$PATH" make EXPLICIT_SUBMODULES="firrtl firrtl-interpreter treadle chisel3 chisel-testers" +test
+          no_output_timeout: 3m
 
 workflows:
   version: 2
