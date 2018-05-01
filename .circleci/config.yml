@@ -51,7 +51,7 @@ jobs:
             - source-v1-
       - run:
           command: |
-            PATH="/opt/verilator/verilator_3_904/bin:$PATH" sbt "++2.12.4" test
+            PATH="/opt/verilator/verilator_3_904/bin:$PATH" make "++2.12.4 test"
           no_output_timeout: 3m
 
 workflows:
