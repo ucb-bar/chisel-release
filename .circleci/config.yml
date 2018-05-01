@@ -51,7 +51,7 @@ jobs:
             - source-v1-
       - run:
           command: |
-            PATH="/opt/verilator/verilator_3_904/bin:$PATH" make EXPLICIT_SUBMODULES="firrtl firrtl-interpreter treadle chisel3 chisel-testers" +test
+            PATH="/opt/verilator/verilator_3_904/bin:$PATH" make EXPLICIT_SUBMODULES="firrtl firrtl-interpreter treadle chisel3 chisel-testers" "++2.12.4" test
           no_output_timeout: 3m
 
 workflows:
