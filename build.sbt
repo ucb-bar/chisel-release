@@ -96,6 +96,7 @@ lazy val treadle = (project in file("treadle")).
 lazy val chisel_release = (project in file (".")).
   settings(commonSettings: _*).
   settings(
+    parallelExecution in ThisBuild := false,
     publishLocal := {},
     publish := {},
     publishArtifact := false,
