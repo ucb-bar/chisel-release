@@ -48,7 +48,7 @@ jobs:
             - source-v1-{{ .Branch }}-
             - source-v1-
 
-     - run: cd firrtl && sbt +clean +publishLocal
+      - run: cd firrtl && sbt +clean +publishLocal
 
       - save_cache:
           paths:
