@@ -5,9 +5,9 @@
 version: 2
 
 jobs:
-  build:
+  build-prep:
     docker:
-      - image: ucbjrl/chisel3-ci
+       - image: ucbjrl/chisel3-ci
         user: "chisel"
 
     working_directory: ~/src/chisel-release
@@ -26,7 +26,29 @@ jobs:
             git submodule sync
             git submodule update --init --recursive
 
-      - run: make +clean +compile
+      - save_cache:
+          paths:
+            - ~/.ivy2
+            - ~/.sbt
+            - ~/src/chisel-release
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+
+   build-firrtl:
+    docker:
+      - image: ucbjrl/chisel3-ci
+        user: "chisel"
+
+    working_directory: ~/src/chisel-release
+
+    steps:
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+
+     - run: cd firrtl && sbt +clean +publishLocal
 
       - save_cache:
           paths:
@@ -35,7 +57,128 @@ jobs:
             - ~/src/chisel-release
           key: source-v1-{{ .Branch }}-{{ .Revision }}
 
-  test:
+  build-firrtl-interpreter:
+    docker:
+      - image: ucbjrl/chisel3-ci
+        user: "chisel"
+
+    working_directory: ~/src/chisel-release
+
+    steps:
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+
+      - run: cd firrtl-interpreter && sbt +clean +publishLocal
+
+      - save_cache:
+          paths:
+            - ~/.ivy2
+            - ~/.sbt
+            - ~/src/chisel-release
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+
+  build-treadle:
+    docker:
+      - image: ucbjrl/chisel3-ci
+        user: "chisel"
+
+    working_directory: ~/src/chisel-release
+
+    steps:
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+
+      - run: cd treadle && sbt +clean +publishLocal
+
+      - save_cache:
+          paths:
+            - ~/.ivy2
+            - ~/.sbt
+            - ~/src/chisel-release
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+
+
+  build-chisel:
+    docker:
+      - image: ucbjrl/chisel3-ci
+        user: "chisel"
+
+    working_directory: ~/src/chisel-release
+
+    steps:
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+
+      - run: cd chisel3 && sbt +clean +publishLocal
+
+      - save_cache:
+          paths:
+            - ~/.ivy2
+            - ~/.sbt
+            - ~/src/chisel-release
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          
+  build-chisel-testers:
+    docker:
+      - image: ucbjrl/chisel3-ci
+        user: "chisel"
+
+    working_directory: ~/src/chisel-release
+
+    steps:
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+
+      - run: cd chisel-testers && sbt +clean +publishLocal
+
+      - save_cache:
+          paths:
+            - ~/.ivy2
+            - ~/.sbt
+            - ~/src/chisel-release
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          
+  build-dsptools:
+    docker:
+      - image: ucbjrl/chisel3-ci
+        user: "chisel"
+
+    working_directory: ~/src/chisel-release
+
+    steps:
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+
+      - run: cd dsptools && sbt +clean +publishLocal
+
+      - save_cache:
+          paths:
+            - ~/.ivy2
+            - ~/.sbt
+            - ~/src/chisel-release
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          
+  test-firrtl:
     docker:
       # specify the version you desire here
       - image: ucbjrl/chisel3-ci
@@ -51,14 +194,157 @@ jobs:
             - source-v1-
       - run:
           command: |
-            PATH="/opt/verilator/verilator_3_904/bin:$PATH" make "++2.12.4 test"
-          no_output_timeout: 3m
+            cd firrtl
+            PATH="/opt/verilator/verilator_3_904/bin:$PATH" sbt +test
+          # no_output_timeout: 3m
+          
+  test-firrtl-interpreter:
+    docker:
+      # specify the version you desire here
+      - image: ucbjrl/chisel3-ci
+        user: "chisel"
+
+    working_directory: ~/src/chisel-release
+        
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - run:
+          command: |
+            cd firrtl-interpreter
+            PATH="/opt/verilator/verilator_3_904/bin:$PATH" sbt +test
+          # no_output_timeout: 3m
+          
+  test-treadle:
+    docker:
+      # specify the version you desire here
+      - image: ucbjrl/chisel3-ci
+        user: "chisel"
+
+    working_directory: ~/src/chisel-release
+        
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - run:
+          command: |
+            cd treadle
+            PATH="/opt/verilator/verilator_3_904/bin:$PATH" sbt +test
+          # no_output_timeout: 3m
+          
+  test-chisel:
+    docker:
+      # specify the version you desire here
+      - image: ucbjrl/chisel3-ci
+        user: "chisel"
+
+    working_directory: ~/src/chisel-release
+        
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - run:
+          command: |
+            cd chisel3
+            PATH="/opt/verilator/verilator_3_904/bin:$PATH" sbt +test
+          # no_output_timeout: 3m
+          
+  test-chisel-testers:
+    docker:
+      # specify the version you desire here
+      - image: ucbjrl/chisel3-ci
+        user: "chisel"
+
+    working_directory: ~/src/chisel-release
+        
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - run:
+          command: |
+            cd chisel-testers
+            PATH="/opt/verilator/verilator_3_904/bin:$PATH" sbt +test
+          # no_output_timeout: 3m
+          
+  test-dsptools:
+    docker:
+      # specify the version you desire here
+      - image: ucbjrl/chisel3-ci
+        user: "chisel"
+
+    working_directory: ~/src/chisel-release
+        
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - run:
+          command: |
+            cd dsptools
+            PATH="/opt/verilator/verilator_3_904/bin:$PATH" sbt +test
+          # no_output_timeout: 3m
 
 workflows:
   version: 2
   build_and_test:
     jobs:
-      - build
-      - test:
+      - build-firrtl
+      - build-firrtl-interpreter
           requires:
-            - build
+            - build-firrtl
+      - build-treadle
+          requires:
+            - build-firrtl
+      - build-chisel
+          requires:
+            - build-firrtl
+            - build-firrtl-interpreter
+      - build-chisel-testers
+          requires:
+            - build-firrtl
+            - build-firrtl-interpreter
+            - build-chisel
+      - build-dsptools
+          requires:
+            - build-firrtl
+            - build-firrtl-interpreter
+            - build-chisel
+            - build-chisel-testers
+      - test-firrtl:
+          requires:
+            - build-firrtl
+      - test-firrtl-interpreter
+          requires:
+            - build-firrtl
+      - test-treadle
+          requires:
+            - build-firrtl
+      - test-chisel
+          requires:
+            - build-firrtl
+            - build-firrtl-interpreter
+      - test-chisel-testers
+          requires:
+            - build-firrtl
+            - build-firrtl-interpreter
+            - build-chisel
+      - test-dsptools
+          requires:
+            - build-firrtl
+            - build-firrtl-interpreter
+            - build-chisel
+            - build-chisel-testers
