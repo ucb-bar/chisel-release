@@ -33,7 +33,7 @@ jobs:
             - ~/src/chisel-release
           key: source-v1-{{ .Branch }}-{{ .Revision }}
 
-   build-firrtl:
+  build-firrtl:
     docker:
       - image: ucbjrl/chisel3-ci
         user: "chisel"
