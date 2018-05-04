@@ -61,7 +61,7 @@ jobs:
             - ~/.sbt
           key: source-v1-{{ .Branch }}-{{ .Revision }}
       - persist_to_workspace:
-          root: ~
+          root: /home/chisel
           paths:
             - .ivy2/local
 
