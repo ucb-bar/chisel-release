@@ -303,22 +303,22 @@ workflows:
   build_and_test:
     jobs:
       - build-firrtl
-      - build-firrtl-interpreter
+      - build-firrtl-interpreter:
           requires:
             - build-firrtl
-      - build-treadle
+      - build-treadle:
           requires:
             - build-firrtl
-      - build-chisel
+      - build-chisel:
           requires:
             - build-firrtl
             - build-firrtl-interpreter
-      - build-chisel-testers
+      - build-chisel-testers:
           requires:
             - build-firrtl
             - build-firrtl-interpreter
             - build-chisel
-      - build-dsptools
+      - build-dsptools:
           requires:
             - build-firrtl
             - build-firrtl-interpreter
@@ -327,22 +327,22 @@ workflows:
       - test-firrtl:
           requires:
             - build-firrtl
-      - test-firrtl-interpreter
+      - test-firrtl-interpreter:
           requires:
             - build-firrtl
-      - test-treadle
+      - test-treadle:
           requires:
             - build-firrtl
-      - test-chisel
+      - test-chisel:
           requires:
             - build-firrtl
             - build-firrtl-interpreter
-      - test-chisel-testers
+      - test-chisel-testers:
           requires:
             - build-firrtl
             - build-firrtl-interpreter
             - build-chisel
-      - test-dsptools
+      - test-dsptools:
           requires:
             - build-firrtl
             - build-firrtl-interpreter
