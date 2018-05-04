@@ -64,6 +64,7 @@ jobs:
           root: /home/chisel
           paths:
             - .ivy2/local
+            - src/chisel-release/firrtl/target
 
   build-firrtl-interpreter:
     docker:
@@ -93,6 +94,7 @@ jobs:
           root: /home/chisel
           paths:
             - .ivy2/local
+            - src/chisel-release/firrtl-interpreter/target
 
   build-treadle:
     docker:
@@ -122,6 +124,7 @@ jobs:
           root: /home/chisel
           paths:
             - .ivy2/local
+            - src/chisel-release/treadle/target
 
 
   build-chisel:
@@ -152,7 +155,8 @@ jobs:
           root: /home/chisel
           paths:
             - .ivy2/local
-          
+             - src/chisel-release/chisel3/target
+         
   build-chisel-testers:
     docker:
       - image: ucbjrl/chisel3-ci
@@ -181,6 +185,7 @@ jobs:
           root: /home/chisel
           paths:
             - .ivy2/local
+            - src/chisel-testers/firrtl/target
           
   build-dsptools:
     docker:
@@ -210,6 +215,7 @@ jobs:
           root: /home/chisel
           paths:
             - .ivy2/local
+            - src/chisel-release/dsptools/target
           
   test-firrtl:
     docker:
@@ -293,10 +299,12 @@ jobs:
             - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
+      # We seem to have memory leaks in chisel tests -
+      # we run out of memory trying to "sbt +test" but a single "sbt test" passes.
       - run:
           command: |
             cd chisel3
-            PATH="/opt/verilator/verilator_3_904/bin:$PATH" sbt +test
+            PATH="/opt/verilator/verilator_3_904/bin:$PATH" sbt test
           # no_output_timeout: 3m
           
   test-chisel-testers:
@@ -374,10 +382,10 @@ workflows:
             - build-firrtl
       - test-firrtl-interpreter:
           requires:
-            - build-firrtl
+            - build-firrtl-interpreter
       - test-treadle:
           requires:
-            - build-firrtl
+            - build-treadle
       - test-chisel:
           requires:
             - build-chisel
