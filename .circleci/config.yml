@@ -25,7 +25,7 @@ jobs:
           command: |
             git submodule sync
             git submodule update --init --recursive
-            date > date
+            date > date.prep
 
       - save_cache:
           paths:
@@ -54,7 +54,7 @@ jobs:
             - source-v1-{{ .Branch }}-
             - source-v1-
 
-      - run: cd firrtl && sbt +clean +publishLocal
+      - run: date > date.firrtl && cd firrtl && sbt +clean +publishLocal
 
       - save_cache:
           paths:
@@ -84,7 +84,7 @@ jobs:
             - source-v1-{{ .Branch }}-
             - source-v1-
 
-      - run: cd firrtl-interpreter && sbt +clean +publishLocal
+      - run: date > date.firrtl-interpreter && cd firrtl-interpreter && sbt +clean +publishLocal
 
       - save_cache:
           paths:
@@ -114,7 +114,7 @@ jobs:
             - source-v1-{{ .Branch }}-
             - source-v1-
 
-      - run: cd treadle && sbt +clean +publishLocal
+      - run: date > date.treadle && cd treadle && sbt +clean +publishLocal
 
       - save_cache:
           paths:
@@ -145,7 +145,7 @@ jobs:
             - source-v1-{{ .Branch }}-
             - source-v1-
 
-      - run: cd chisel3 && sbt +clean +publishLocal
+      - run: date > date.chisel3 && cd chisel3 && sbt +clean +publishLocal
 
       - save_cache:
           paths:
@@ -175,7 +175,7 @@ jobs:
             - source-v1-{{ .Branch }}-
             - source-v1-
 
-      - run: cd chisel-testers && sbt +clean +publishLocal
+      - run: date > date.chisel-testers && cd chisel-testers && sbt +clean +publishLocal
 
       - save_cache:
           paths:
@@ -205,7 +205,7 @@ jobs:
             - source-v1-{{ .Branch }}-
             - source-v1-
 
-      - run: cd dsptools && sbt +clean +publishLocal
+      - run: date > date.dsptools && cd dsptools && sbt +clean +publishLocal
 
       - save_cache:
           paths:
@@ -348,6 +348,7 @@ jobs:
             - source-v1-
       - run:
           command: |
+            for f in date.*; do echo $f && cat $f; done
             cd dsptools
             PATH="/opt/verilator/verilator_3_904/bin:$PATH" sbt +test
           # no_output_timeout: 3m
