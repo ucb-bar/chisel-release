@@ -25,6 +25,7 @@ jobs:
           command: |
             git submodule sync
             git submodule update --init --recursive
+            date > date
 
       - save_cache:
           paths:
@@ -355,7 +356,10 @@ workflows:
   version: 2
   build_and_test:
     jobs:
-      - build-firrtl
+      - build-prep
+      - build-firrtl:
+          requires:
+            - build-prep
       - build-firrtl-interpreter:
           requires:
             - build-firrtl
