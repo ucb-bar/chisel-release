@@ -155,7 +155,7 @@ jobs:
           root: /home/chisel
           paths:
             - .ivy2/local
-             - src/chisel-release/chisel3/target
+            - src/chisel-release/chisel3/target
          
   build-chisel-testers:
     docker:
