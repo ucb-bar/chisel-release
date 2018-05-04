@@ -32,7 +32,7 @@ jobs:
             - ~/.sbt
           key: source-v1-{{ .Branch }}-{{ .Revision }}
       - persist_to_workspace:
-          root: ~
+          root: /home/chisel
           paths:
             - src/chisel-release
 
@@ -45,7 +45,7 @@ jobs:
 
     steps:
       - attach_workspace:
-          at: ~
+          at: /home/chisel
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -74,7 +74,7 @@ jobs:
 
     steps:
       - attach_workspace:
-          at: ~
+          at: /home/chisel
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -86,11 +86,11 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.ivy2
+            - ~/.ivy2/cache
             - ~/.sbt
           key: source-v1-{{ .Branch }}-{{ .Revision }}
       - persist_to_workspace:
-          root: ~
+          root: /home/chisel
           paths:
             - .ivy2/local
 
@@ -103,7 +103,7 @@ jobs:
 
     steps:
       - attach_workspace:
-          at: ~
+          at: /home/chisel
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -115,11 +115,11 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.ivy2
+            - ~/.ivy2/cache
             - ~/.sbt
           key: source-v1-{{ .Branch }}-{{ .Revision }}
       - persist_to_workspace:
-          root: ~
+          root: /home/chisel
           paths:
             - .ivy2/local
 
@@ -133,7 +133,7 @@ jobs:
 
     steps:
       - attach_workspace:
-          at: ~
+          at: /home/chisel
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -145,11 +145,11 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.ivy2
+            - ~/.ivy2/cache
             - ~/.sbt
           key: source-v1-{{ .Branch }}-{{ .Revision }}
       - persist_to_workspace:
-          root: ~
+          root: /home/chisel
           paths:
             - .ivy2/local
           
@@ -162,7 +162,7 @@ jobs:
 
     steps:
       - attach_workspace:
-          at: ~
+          at: /home/chisel
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -174,11 +174,11 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.ivy2
+            - ~/.ivy2/cache
             - ~/.sbt
           key: source-v1-{{ .Branch }}-{{ .Revision }}
       - persist_to_workspace:
-          root: ~
+          root: /home/chisel
           paths:
             - .ivy2/local
           
@@ -191,7 +191,7 @@ jobs:
 
     steps:
       - attach_workspace:
-          at: ~
+          at: /home/chisel
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -203,11 +203,11 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.ivy2
+            - ~/.ivy2/cache
             - ~/.sbt
           key: source-v1-{{ .Branch }}-{{ .Revision }}
       - persist_to_workspace:
-          root: ~
+          root: /home/chisel
           paths:
             - .ivy2/local
           
@@ -221,7 +221,7 @@ jobs:
         
     steps:
       - attach_workspace:
-          at: ~
+          at: /home/chisel
       - restore_cache:
           keys:
             - source-v1-{{ .Branch }}-{{ .Revision }}
@@ -243,7 +243,7 @@ jobs:
         
     steps:
       - attach_workspace:
-          at: ~
+          at: /home/chisel
       - restore_cache:
           keys:
             - source-v1-{{ .Branch }}-{{ .Revision }}
@@ -265,7 +265,7 @@ jobs:
         
     steps:
       - attach_workspace:
-          at: ~
+          at: /home/chisel
       - restore_cache:
           keys:
             - source-v1-{{ .Branch }}-{{ .Revision }}
@@ -287,7 +287,7 @@ jobs:
         
     steps:
       - attach_workspace:
-          at: ~
+          at: /home/chisel
       - restore_cache:
           keys:
             - source-v1-{{ .Branch }}-{{ .Revision }}
@@ -309,7 +309,7 @@ jobs:
         
     steps:
       - attach_workspace:
-          at: ~
+          at: /home/chisel
       - restore_cache:
           keys:
             - source-v1-{{ .Branch }}-{{ .Revision }}
@@ -331,7 +331,7 @@ jobs:
         
     steps:
       - attach_workspace:
-          at: ~
+          at: /home/chisel
       - restore_cache:
           keys:
             - source-v1-{{ .Branch }}-{{ .Revision }}
