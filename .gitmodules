@@ -13,3 +13,6 @@
 [submodule "dsptools"]
 	path = dsptools
 	url = git@github.com:ucb-bar/dsptools.git
+[submodule "treadle"]
+	path = treadle
+	url = git@github.com:ucb-bar/treadle.git
