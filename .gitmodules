@@ -16,3 +16,6 @@
 [submodule "treadle"]
 	path = treadle
 	url = git@github.com:ucb-bar/treadle.git
+[submodule "rocket-chip"]
+	path = rocket-chip
+	url = git@github.com:grebe/rocket-chip.git

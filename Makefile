@@ -4,7 +4,10 @@ SBT=sbt
 #  the true project/submodule dependencies, we need to execute sbt commands
 #  in a specific directory order and do a publishLocal at the end
 #  so the results are available to later submodules.
-EXPLICIT_SUBMODULES=firrtl firrtl-interpreter treadle chisel3 chisel-testers dsptools
+EXPLICIT_SUBMODULES=firrtl firrtl-interpreter treadle chisel3 chisel-testers rocket-chip 
+
+# dsptools
+
 # The following targets need a publishLocal so their results are available.
 NEED_PUBLISHING = compile test +compile +test
 
@@ -14,6 +17,7 @@ NEED_PUBLISHING = compile test +compile +test
 define doSBT
 $(eval publishlocal=$(if $(filter $(NEED_PUBLISHING),$(1)),$(if $(findstring +,$(1)),+publishLocal,publishLocal)))
 	for c in $(EXPLICIT_SUBMODULES); do ( echo $$c && cd $$c && $(SBT) $(1) $(publishlocal) ) || exit 1; done
+	echo dsptools && cd dsptools && $(SBT) "project rocket-dsptools" $(1) || exit 1
 endef
 
 default compile:
@@ -29,6 +33,9 @@ coverage:
 
 publish-local:
 	$(call doSBT,publishLocal)
+
+publishLocalSigned:
+	$(call doSBT,publishLocalSigned)
 
 .DEFAULT:
 	$(call doSBT,$@)

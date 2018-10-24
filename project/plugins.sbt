@@ -28,4 +28,11 @@ addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.5.1")
 
 addSbtPlugin("com.github.gseitz" % "sbt-protobuf" % "0.6.3")
 
+addSbtPlugin("org.xerial.sbt" % "sbt-pack" % "0.9.3")
+
+addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "2.3")
+
+addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.1.0")
+
 libraryDependencies += "com.github.os72" % "protoc-jar" % "3.5.1.1"
+
