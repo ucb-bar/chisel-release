@@ -30,9 +30,9 @@ def javacOptionsVersion(scalaVersion: String): Seq[String] = {
   }
 }
 
-scalaVersion := "2.11.12"
+scalaVersion := "2.12.6"
 
-crossScalaVersions := Seq("2.11.12", "2.12.4")
+crossScalaVersions := Seq("2.11.12", "2.12.6")
 
 scalacOptions := Seq("-deprecation", "-feature") ++ scalacOptionsVersion(scalaVersion.value)
 
@@ -40,7 +40,6 @@ javacOptions ++= javacOptionsVersion(scalaVersion.value)
 
 lazy val commonSettings = Seq (
   organization := "edu.berkeley.cs",
-  scalaVersion := "2.11.11",
 
   resolvers ++= Seq(
     Resolver.sonatypeRepo("snapshots"),
