@@ -113,7 +113,7 @@ jobs:
       # Set environment
       - run: echo 'export PATH="/opt/verilator/verilator_3_922/bin:/opt/yosys/bin:$PATH"' >> $BASH_ENV
       
-      - run: date > date.firrtl-interpreter && (cd firrtl-interpreter && sbt $SBT_ARGS +publishLocal
+      - run: date > date.firrtl-interpreter && cd firrtl-interpreter && sbt $SBT_ARGS +publishLocal
 
       - save_cache:
           paths:
@@ -146,7 +146,7 @@ jobs:
       # Set environment
       - run: echo 'export PATH="/opt/verilator/verilator_3_922/bin:/opt/yosys/bin:$PATH"' >> $BASH_ENV
       
-      - run: date > date.treadle && (cd treadle && sbt $SBT_ARGS +publishLocal)
+      - run: date > date.treadle && cd treadle && sbt $SBT_ARGS +publishLocal
 
       - save_cache:
           paths:
@@ -179,7 +179,7 @@ jobs:
       # Set environment
       - run: echo 'export PATH="/opt/verilator/verilator_3_922/bin:/opt/yosys/bin:$PATH"' >> $BASH_ENV
 
-      - run: date > date.chisel3 && (cd chisel3 && sbt $SBT_ARGS +publishLocal)
+      - run: date > date.chisel3 && cd chisel3 && sbt $SBT_ARGS +publishLocal
 
       - save_cache:
           paths:
@@ -212,7 +212,7 @@ jobs:
       # Set environment
       - run: echo 'export PATH="/opt/verilator/verilator_3_922/bin:/opt/yosys/bin:$PATH"' >> $BASH_ENV
 
-      - run: date > date.chisel-testers && (cd chisel-testers && sbt $SBT_ARGS +publishLocal)
+      - run: date > date.chisel-testers && cd chisel-testers && sbt $SBT_ARGS +publishLocal
 
       - save_cache:
           paths:
@@ -231,6 +231,7 @@ jobs:
           
   build-dsptools:
     <<: *defaultImageUserWDEnv
+    
     steps:
       - attach_workspace:
           at: /home/chisel
@@ -244,7 +245,7 @@ jobs:
       # Set environment
       - run: echo 'export PATH="/opt/verilator/verilator_3_922/bin:/opt/yosys/bin:$PATH"' >> $BASH_ENV
 
-      - run: date > date.dsptools && (cd dsptools && sbt $SBT_ARGS +publishLocal)
+      - run: date > date.dsptools && cd dsptools && sbt $SBT_ARGS +publishLocal
 
       - save_cache:
           paths:
@@ -277,8 +278,7 @@ jobs:
       - run: echo 'export PATH="/opt/verilator/verilator_3_922/bin:/opt/yosys/bin:$PATH"' >> $BASH_ENV
       - run:
           command: |
-            (cd firrtl && sbt $SBT_ARGS +test)
-          # no_output_timeout: 3m
+            cd firrtl && sbt $SBT_ARGS +test
           
   test-firrtl-interpreter:
     <<: *defaultImageUserWDEnv
@@ -296,8 +296,7 @@ jobs:
       - run: echo 'export PATH="/opt/verilator/verilator_3_922/bin:/opt/yosys/bin:$PATH"' >> $BASH_ENV
       - run:
           command: |
-            (cd firrtl-interpreter && sbt $SBT_ARGS +test)
-          # no_output_timeout: 3m
+            cd firrtl-interpreter && sbt $SBT_ARGS +test
           
   test-treadle:
     <<: *defaultImageUserWDEnv
@@ -315,8 +314,7 @@ jobs:
       - run: echo 'export PATH="/opt/verilator/verilator_3_922/bin:/opt/yosys/bin:$PATH"' >> $BASH_ENV
       - run:
           command: |
-            (cd treadle && sbt $SBT_ARGS +test)
-          # no_output_timeout: 3m
+            cd treadle && sbt $SBT_ARGS +test
           
   test-chisel:
     <<: *defaultImageUserWDEnv
@@ -336,8 +334,7 @@ jobs:
       # we run out of memory trying to "sbt +test" but a single "sbt test" passes.
       - run:
           command: |
-            (cd chisel3 && sbt $SBT_ARGS test)
-          # no_output_timeout: 3m
+            cd chisel3 && sbt $SBT_ARGS test
           
   test-chisel-testers:
     <<: *defaultImageUserWDEnv
@@ -355,8 +352,7 @@ jobs:
       - run: echo 'export PATH="/opt/verilator/verilator_3_922/bin:/opt/yosys/bin:$PATH"' >> $BASH_ENV
       - run:
           command: |
-            (cd chisel-testers && sbt $SBT_ARGS +test)
-          # no_output_timeout: 3m
+            cd chisel-testers && sbt $SBT_ARGS +test
           
   test-dsptools:
     <<: *defaultImageUserWDEnv
@@ -375,8 +371,7 @@ jobs:
       - run:
           command: |
             for f in date.*; do echo $f && cat $f; done
-            (cd dsptools && sbt $SBT_ARGS +test)
-          # no_output_timeout: 3m
+            cd dsptools && sbt $SBT_ARGS +test
 
 workflows:
   version: 2
