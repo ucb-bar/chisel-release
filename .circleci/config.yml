@@ -21,7 +21,7 @@ defaultImageUserWDEnv: &defaultImageUserWDEnv
 version: 2
 
 jobs:
-  build-prep:
+  build:
     <<: *defaultImageUserWDEnv
 
     steps:
@@ -102,7 +102,7 @@ workflows:
   
   build_and_test:
     jobs:
-      - build-prep
+      - build
       - build-firrtl:
           requires:
-            - build-prep
+            - build
