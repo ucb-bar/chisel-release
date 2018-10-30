@@ -31,6 +31,7 @@ jobs:
       - run:
           command: |
             date > date.prep
+            printenv
             git submodule sync
             git submodule update --init --recursive
 
@@ -373,7 +374,7 @@ jobs:
       - run:
           command: |
             for f in date.*; do echo $f && cat $f; done
-            cd dsptools && sbt $SBT_ARGS +test
+            (cd dsptools && sbt $SBT_ARGS "++2.12.6" test)
 
 
 workflows:
