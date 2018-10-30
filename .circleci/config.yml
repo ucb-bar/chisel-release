@@ -21,16 +21,10 @@ defaultImageUserWDEnv: &defaultImageUserWDEnv
 version: 2
 
 jobs:
-  build:
+  build_prep:
     <<: *defaultImageUserWDEnv
 
     steps:
-      # Download and cache dependencies            
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "build.sbt" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
 
       - checkout
 
@@ -40,6 +34,12 @@ jobs:
             git submodule sync
             git submodule update --init --recursive
 
+      # Download and cache dependencies            
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "build.sbt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
 
       - save_cache:
           paths:
@@ -102,7 +102,7 @@ workflows:
   
   build_and_test:
     jobs:
-      - build
-      - build-firrtl:
+      - build_prep
+      - build_firrtl:
           requires:
-            - build
+            - build_prep
