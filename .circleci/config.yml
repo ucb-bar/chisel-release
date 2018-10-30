@@ -2,77 +2,103 @@
 #
 # Check https://circleci.com/docs/2.0/sample-config/ for more details
 #
+defaultImageUserWDEnv: &defaultImageUserWDEnv
+    docker:
+      - image: ucbbar/chisel3-tools
+        user: "chisel"
+    
+    working_directory: ~/repo
+
+    environment:
+      # Customize the JVM maximum heap limit
+      JVM_OPTS: -Xmx3200m
+      TERM: dumb
+      RUN_FIRRTL_TESTS: true
+      RUN_CHISEL_TESTS: true
+      RUN_FORMAL_CHECKS: true
+      SBT_ARGS: "-Dsbt.log.noformat=true"
+
 version: 2
 
 jobs:
   build-prep:
-    docker:
-      - image: ucbjrl/chisel3-ci
-        user: "chisel"
-
-    working_directory: ~/src/chisel-release
+    <<: *defaultImageUserWDEnv
 
     steps:
+      # Download and cache dependencies            
+      - checkout
+        post:
+          - git submodule sync
+          - git submodule update --init --recursive
+
+
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
+          - v1-dependencies-{{ checksum "build.sbt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
 
-      - checkout
+      - run: date > date.prep
+
+      - save_cache:
+          paths:
+            - ~/.m2
+            - ~/.ivy2/cache
+            - ~/.sbt
+          key: v1-dependencies--{{ checksum "build.sbt" }}
+
+      - persist_to_workspace:
+          root: /home/chisel
+          paths:
+            - .m2
+            - .ivy2/local
+            - .sbt
+            - .ssh
+            - repo
+
+  build_firrtl:
+    <<: *defaultImageUserWDEnv
+
+    steps:
+      - attach_workspace:
+          at: /home/chisel
+
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "build.sbt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+          
+      # Set environment
+      - run: echo 'export PATH="/opt/verilator/verilator_3_922/bin:/opt/yosys/bin:$PATH"' >> $BASH_ENV
+      
+      # run tests!
       - run:
           command: |
-            git submodule sync
-            git submodule update --init --recursive
-            date > date.prep
+            if $RUN_FIRRTL_TESTS ; then
+              date > date.firrtl
+              (cd firrtl && cat /dev/null | sbt $SBT_ARGS +publishLocal)
+            fi
 
       - save_cache:
           paths:
+            - ~/.m2
             - ~/.ivy2/cache
             - ~/.sbt
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: v1-dependencies--{{ checksum "build.sbt" }}
+          
       - persist_to_workspace:
           root: /home/chisel
           paths:
-            - src/chisel-release
-
-  build-firrtl:
-    docker:
-      - image: ucbjrl/chisel3-ci
-        user: "chisel"
-
-    working_directory: ~/src/chisel-release
-
-    steps:
-      - attach_workspace:
-          at: /home/chisel
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-
-      - run: date > date.firrtl && cd firrtl && sbt +clean +publishLocal
-
-      - save_cache:
-          paths:
-            - ~/.ivy2/cache
-            - ~/.sbt
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-      - persist_to_workspace:
-          root: /home/chisel
-          paths:
+            - .m2
             - .ivy2/local
-            - src/chisel-release/firrtl/target
+            - .sbt
+            - .ssh
+            - repo
 
   build-firrtl-interpreter:
-    docker:
-      - image: ucbjrl/chisel3-ci
-        user: "chisel"
-
-    working_directory: ~/src/chisel-release
+    <<: *defaultImageUserWDEnv
 
     steps:
       - attach_workspace:
@@ -80,29 +106,32 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-
-      - run: date > date.firrtl-interpreter && cd firrtl-interpreter && sbt +clean +publishLocal
+          - v1-dependencies-{{ checksum "build.sbt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+          
+      # Set environment
+      - run: echo 'export PATH="/opt/verilator/verilator_3_922/bin:/opt/yosys/bin:$PATH"' >> $BASH_ENV
+      
+      - run: date > date.firrtl-interpreter && (cd firrtl-interpreter && sbt $SBT_ARGS +publishLocal
 
       - save_cache:
           paths:
+            - ~/.m2
             - ~/.ivy2/cache
             - ~/.sbt
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: v1-dependencies--{{ checksum "build.sbt" }}
       - persist_to_workspace:
           root: /home/chisel
           paths:
+            - .m2
             - .ivy2/local
-            - src/chisel-release/firrtl-interpreter/target
-
+            - .sbt
+            - .ssh
+            - repo
+            
   build-treadle:
-    docker:
-      - image: ucbjrl/chisel3-ci
-        user: "chisel"
-
-    working_directory: ~/src/chisel-release
+    <<: *defaultImageUserWDEnv
 
     steps:
       - attach_workspace:
@@ -110,30 +139,32 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-
-      - run: date > date.treadle && cd treadle && sbt +clean +publishLocal
+          - v1-dependencies-{{ checksum "build.sbt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+          
+      # Set environment
+      - run: echo 'export PATH="/opt/verilator/verilator_3_922/bin:/opt/yosys/bin:$PATH"' >> $BASH_ENV
+      
+      - run: date > date.treadle && (cd treadle && sbt $SBT_ARGS +publishLocal)
 
       - save_cache:
           paths:
+            - ~/.m2
             - ~/.ivy2/cache
             - ~/.sbt
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: v1-dependencies--{{ checksum "build.sbt" }}
       - persist_to_workspace:
           root: /home/chisel
           paths:
+            - .m2
             - .ivy2/local
-            - src/chisel-release/treadle/target
-
+            - .sbt
+            - .ssh
+            - repo
 
   build-chisel:
-    docker:
-      - image: ucbjrl/chisel3-ci
-        user: "chisel"
-
-    working_directory: ~/src/chisel-release
+    <<: *defaultImageUserWDEnv
 
     steps:
       - attach_workspace:
@@ -141,29 +172,32 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
+          - v1-dependencies-{{ checksum "build.sbt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+          
+      # Set environment
+      - run: echo 'export PATH="/opt/verilator/verilator_3_922/bin:/opt/yosys/bin:$PATH"' >> $BASH_ENV
 
-      - run: date > date.chisel3 && cd chisel3 && sbt +clean +publishLocal
+      - run: date > date.chisel3 && (cd chisel3 && sbt $SBT_ARGS +publishLocal)
 
       - save_cache:
           paths:
+            - ~/.m2
             - ~/.ivy2/cache
             - ~/.sbt
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: v1-dependencies--{{ checksum "build.sbt" }}
       - persist_to_workspace:
           root: /home/chisel
           paths:
+            - .m2
             - .ivy2/local
-            - src/chisel-release/chisel3/target
+            - .sbt
+            - .ssh
+            - repo
          
   build-chisel-testers:
-    docker:
-      - image: ucbjrl/chisel3-ci
-        user: "chisel"
-
-    working_directory: ~/src/chisel-release
+    <<: *defaultImageUserWDEnv
 
     steps:
       - attach_workspace:
@@ -171,186 +205,177 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
+          - v1-dependencies-{{ checksum "build.sbt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+          
+      # Set environment
+      - run: echo 'export PATH="/opt/verilator/verilator_3_922/bin:/opt/yosys/bin:$PATH"' >> $BASH_ENV
 
-      - run: date > date.chisel-testers && cd chisel-testers && sbt +clean +publishLocal
+      - run: date > date.chisel-testers && (cd chisel-testers && sbt $SBT_ARGS +publishLocal)
 
       - save_cache:
           paths:
+            - ~/.m2
             - ~/.ivy2/cache
             - ~/.sbt
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: v1-dependencies--{{ checksum "build.sbt" }}
       - persist_to_workspace:
           root: /home/chisel
           paths:
+            - .m2
             - .ivy2/local
-            - src/chisel-testers/firrtl/target
+            - .sbt
+            - .ssh
+            - repo
           
   build-dsptools:
-    docker:
-      - image: ucbjrl/chisel3-ci
-        user: "chisel"
-
-    working_directory: ~/src/chisel-release
-
+    <<: *defaultImageUserWDEnv
     steps:
       - attach_workspace:
           at: /home/chisel
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
+          - v1-dependencies-{{ checksum "build.sbt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+          
+      # Set environment
+      - run: echo 'export PATH="/opt/verilator/verilator_3_922/bin:/opt/yosys/bin:$PATH"' >> $BASH_ENV
 
-      - run: date > date.dsptools && cd dsptools && sbt +clean +publishLocal
+      - run: date > date.dsptools && (cd dsptools && sbt $SBT_ARGS +publishLocal)
 
       - save_cache:
           paths:
+            - ~/.m2
             - ~/.ivy2/cache
             - ~/.sbt
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: v1-dependencies--{{ checksum "build.sbt" }}
       - persist_to_workspace:
           root: /home/chisel
           paths:
+            - .m2
             - .ivy2/local
-            - src/chisel-release/dsptools/target
+            - .sbt
+            - .ssh
+            - repo
           
   test-firrtl:
-    docker:
-      # specify the version you desire here
-      - image: ucbjrl/chisel3-ci
-        user: "chisel"
-
-    working_directory: ~/src/chisel-release
+    <<: *defaultImageUserWDEnv
         
     steps:
       - attach_workspace:
           at: /home/chisel
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
+          - v1-dependencies-{{ checksum "build.sbt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+          
+      # Set environment
+      - run: echo 'export PATH="/opt/verilator/verilator_3_922/bin:/opt/yosys/bin:$PATH"' >> $BASH_ENV
       - run:
           command: |
-            cd firrtl
-            PATH="/opt/verilator/verilator_3_904/bin:$PATH" sbt +test
+            (cd firrtl && sbt $SBT_ARGS +test)
           # no_output_timeout: 3m
           
   test-firrtl-interpreter:
-    docker:
-      # specify the version you desire here
-      - image: ucbjrl/chisel3-ci
-        user: "chisel"
-
-    working_directory: ~/src/chisel-release
+    <<: *defaultImageUserWDEnv
         
     steps:
       - attach_workspace:
           at: /home/chisel
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
+          - v1-dependencies-{{ checksum "build.sbt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+          
+      # Set environment
+      - run: echo 'export PATH="/opt/verilator/verilator_3_922/bin:/opt/yosys/bin:$PATH"' >> $BASH_ENV
       - run:
           command: |
-            cd firrtl-interpreter
-            PATH="/opt/verilator/verilator_3_904/bin:$PATH" sbt +test
+            (cd firrtl-interpreter && sbt $SBT_ARGS +test)
           # no_output_timeout: 3m
           
   test-treadle:
-    docker:
-      # specify the version you desire here
-      - image: ucbjrl/chisel3-ci
-        user: "chisel"
-
-    working_directory: ~/src/chisel-release
+    <<: *defaultImageUserWDEnv
         
     steps:
       - attach_workspace:
           at: /home/chisel
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
+          - v1-dependencies-{{ checksum "build.sbt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+          
+      # Set environment
+      - run: echo 'export PATH="/opt/verilator/verilator_3_922/bin:/opt/yosys/bin:$PATH"' >> $BASH_ENV
       - run:
           command: |
-            cd treadle
-            PATH="/opt/verilator/verilator_3_904/bin:$PATH" sbt +test
+            (cd treadle && sbt $SBT_ARGS +test)
           # no_output_timeout: 3m
           
   test-chisel:
-    docker:
-      # specify the version you desire here
-      - image: ucbjrl/chisel3-ci
-        user: "chisel"
-
-    working_directory: ~/src/chisel-release
+    <<: *defaultImageUserWDEnv
         
     steps:
       - attach_workspace:
           at: /home/chisel
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
+          - v1-dependencies-{{ checksum "build.sbt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+          
+      # Set environment
+      - run: echo 'export PATH="/opt/verilator/verilator_3_922/bin:/opt/yosys/bin:$PATH"' >> $BASH_ENV
       # We seem to have memory leaks in chisel tests -
       # we run out of memory trying to "sbt +test" but a single "sbt test" passes.
       - run:
           command: |
-            cd chisel3
-            PATH="/opt/verilator/verilator_3_904/bin:$PATH" sbt test
+            (cd chisel3 && sbt $SBT_ARGS test)
           # no_output_timeout: 3m
           
   test-chisel-testers:
-    docker:
-      # specify the version you desire here
-      - image: ucbjrl/chisel3-ci
-        user: "chisel"
-
-    working_directory: ~/src/chisel-release
+    <<: *defaultImageUserWDEnv
         
     steps:
       - attach_workspace:
           at: /home/chisel
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
+          - v1-dependencies-{{ checksum "build.sbt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+          
+      # Set environment
+      - run: echo 'export PATH="/opt/verilator/verilator_3_922/bin:/opt/yosys/bin:$PATH"' >> $BASH_ENV
       - run:
           command: |
-            cd chisel-testers
-            PATH="/opt/verilator/verilator_3_904/bin:$PATH" sbt +test
+            (cd chisel-testers && sbt $SBT_ARGS +test)
           # no_output_timeout: 3m
           
   test-dsptools:
-    docker:
-      # specify the version you desire here
-      - image: ucbjrl/chisel3-ci
-        user: "chisel"
-
-    working_directory: ~/src/chisel-release
+    <<: *defaultImageUserWDEnv
         
     steps:
       - attach_workspace:
           at: /home/chisel
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
+          - v1-dependencies-{{ checksum "build.sbt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+          
+      # Set environment
+      - run: echo 'export PATH="/opt/verilator/verilator_3_922/bin:/opt/yosys/bin:$PATH"' >> $BASH_ENV
       - run:
           command: |
             for f in date.*; do echo $f && cat $f; done
-            cd dsptools
-            PATH="/opt/verilator/verilator_3_904/bin:$PATH" sbt +test
+            (cd dsptools && sbt $SBT_ARGS +test)
           # no_output_timeout: 3m
 
 workflows:
