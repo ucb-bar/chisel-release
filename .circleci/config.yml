@@ -26,20 +26,20 @@ jobs:
 
     steps:
       # Download and cache dependencies            
-      - checkout
-        post:
-          - git submodule sync
-          - git submodule update --init --recursive
-
-
-      # Download and cache dependencies
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "build.sbt" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: date > date.prep
+      - checkout
+
+      - run:
+          command: |
+            date > date.prep
+            git submodule sync
+            git submodule update --init --recursive
+
 
       - save_cache:
           paths:
