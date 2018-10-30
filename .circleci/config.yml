@@ -78,7 +78,7 @@ jobs:
           command: |
             if $RUN_FIRRTL_TESTS ; then
               date > date.firrtl
-              (cd firrtl && cat /dev/null | sbt $SBT_ARGS +publishLocal)
+              cd firrtl && cat /dev/null | sbt $SBT_ARGS +publishLocal
             fi
 
       - save_cache:
