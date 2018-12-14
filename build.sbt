@@ -30,6 +30,8 @@ def javacOptionsVersion(scalaVersion: String): Seq[String] = {
   }
 }
 
+version := "3.1.5"
+
 scalaVersion := "2.11.12"
 
 crossScalaVersions := Seq("2.11.12", "2.12.4")
