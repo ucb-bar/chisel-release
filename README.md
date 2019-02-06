@@ -33,6 +33,9 @@ $ git submodule update --init --recursive
 ```bash
 $ make +clean +publishLocal
 ```
+
+Please see [2] and [3] for details on publishing SNAPSHOT and release versions on Sonatype/Maven.
+
 In order to understand the semantics of Chisel versions, we need to say something about Chisel development.
 
 ## Chisel development
@@ -83,7 +86,7 @@ I.e., the _tag_ `v3.1.6` corresponds to the release `3.1.6` and it will tag a co
 The _branch_ `3.1.x` contains the history of commits for the `3.1` series of releases (major version 3.1).
 The _tag_ `v3.1.6` represents the state of the `3.1` major version at the time of the 3.1.6 release.
 
-When preparing the next 3.1 minor release (say, `3.1.8`, you would:
+When preparing the next 3.1 minor release (say, `3.1.8`), you would:
 - checkout the `3.1.x` branch,
 - bump the internal version number in `build.sbt` to `3.1.8`,
 - add/cherry-pick your changes,
@@ -101,3 +104,5 @@ This change will cascade as downstream repositories bump the required versions o
 The exception to this are the example repositories (chisel-template and chisel-tutorial) which in principle should never have downstream repositories dependent on them, and which are intended to be built with the latest version of the current major release.
 
 [1] https://nvie.com/posts/a-successful-git-branching-model/
+[2] https://github.com/ucb-bar/chisel-release/blob/publicize/doc/publish-SNAPSHOT.md
+[3] https://github.com/ucb-bar/chisel-release/blob/publicize/doc/publish-release.md
