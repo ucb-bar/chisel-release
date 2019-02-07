@@ -92,10 +92,15 @@ lazy val treadle = (project in file("treadle")).
   settings(publishSettings: _*).
   dependsOn(firrtl)
 
-lazy val rocket = (project in file("rocket-chip")).
+lazy val rocketchip = (project in file("rocket-chip")).
   settings(commonSettings: _*).
   settings(publishSettings: _*).
   dependsOn(chisel)
+
+lazy val testchipip = (project in file("testchipip")).
+  settings(commonSettings: _*).
+  settings(publishSettings: _*).
+  dependsOn(rocketchip)
 
 lazy val chisel_release = (project in file (".")).
   settings(commonSettings: _*).
@@ -106,6 +111,6 @@ lazy val chisel_release = (project in file (".")).
     packagedArtifacts := Map.empty
   ).
   dependsOn(firrtl).
-  aggregate(firrtl, chisel, firrtl_interpreter, treadle, chisel_testers, rocket)
+  aggregate(firrtl, chisel, firrtl_interpreter, treadle, chisel_testers, rocketchip, testchipip)
 
 buildInfoUsePackageAsPath := true
