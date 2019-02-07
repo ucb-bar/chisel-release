@@ -5,7 +5,7 @@ $ git clone https://github.com/ucb-bar/chisel-release.git
 ```
 - checkout the appropriate release branch. \
 If this is a brand-new major release, you will need to create the major release branch. \
-This will typically be `z.y.x` where `z.y` is one greater than the last major release and `x` is the character **x**. \
+This will typically be `z.y.x` where `z.y` is one greater than the last major release and `x` is the character **x** (e.g. `3.1.x`, `3.2.x`). \
 You will need to decide if you're going to clone from master or from the prior release branch. \
 If this is a minor release (you'll use the same `z.y` as the previous release and increment the last digit of the release), \
 you'll continue with the existing `z.y.x` branch.
@@ -36,7 +36,7 @@ $ git checkout 3.1.x
 $ git pull
 $ git submodule --init --update
 ```
-- edit the versions in build.sbt and */build.sbt to bump the individual version numbers
+- edit the versions in `build.sbt` and `*/build.sbt` to bump the individual version numbers
 - for each individual submodule, merge in the appropriate changes from master. \
 These may be cherry-picks, but be careful. \
 A combination of cherry-picks will unlikely have undergone much testing.
