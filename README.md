@@ -71,14 +71,20 @@ Minor releases (bug fixes or experimental features) are created from commits che
 
 ## Branches vs. tags
 There is the potential for confusion here.
-The namespaces should be separate, but git doesn't enforce that.
-You can have both a tag named `tag` and a branch named `tag`.
+The namespaces (_branch_ and _tag_) are separate.
+You can have both a _tag_ named `tag` and a _branch_ named `tag` referring to different commits.
 Checking out `tag` produces:
 ```bash
 $ git checkout tag
 warning: refname 'tag' is ambiguous.
 Switched to branch 'tag'
 ```
+You can force `sbt` to interpret the name as a _tag_ instead of a _branch_ with:
+```bash
+$ git checkout tags/tag
+```
+but I think it's better to avoid the confusion altogether by ensuring that _tag_ and _branch_ names are distinct.
+
 In general, _tags_ are fixed and correspond to a specific commit.
 _Branches_ represent a sequence of commits and will evolve over time.
 Where there is the possibility of confusion, we prefix a tag corresponding to a release with the character `v`. \
