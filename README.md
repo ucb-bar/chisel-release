@@ -98,9 +98,10 @@ When preparing the next 3.1 minor release (say, `3.1.8`), you would:
 - add/cherry-pick your changes,
 - commit your changes,
 - tag this commit with a `v3.1.8`
+- push your updated `3.1.x` branch and the `v3.1.8` tag upstream
 
 ## Reproducible builds and versioning
-We've opted to make (as far as we can) stable builds reproducible.
+We've opted to make stable builds reproducible (as far as we can).
 This means that for a stable build to use an updated upstream dependency, its version number must change, even if there's no change to its code base.
 For example, if we find and fix a bug in FIRRTL, we'll publish a new version.
 For non-SNAPSHOT (i.e., _stable_) releases, this involves increasing the minor version number for FIRRTL.
