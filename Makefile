@@ -4,7 +4,7 @@ SBT=sbt
 #  the true project/submodule dependencies, we need to execute sbt commands
 #  in a specific directory order and do a publishLocal at the end
 #  so the results are available to later submodules.
-EXPLICIT_SUBMODULES=firrtl firrtl-interpreter treadle chisel3 chisel-testers dsptools
+EXPLICIT_SUBMODULES=firrtl firrtl-interpreter treadle chisel3 diagrammer chisel-testers dsptools
 # The following targets need a publishLocal so their results are available.
 NEED_PUBLISHING = compile test +compile +test
 
