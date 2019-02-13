@@ -78,16 +78,16 @@ lazy val chisel_testers = (project in file("chisel-testers")).
   settings(publishSettings: _*).
   dependsOn(chisel, firrtl, firrtl_interpreter, treadle)
 
+lazy val dsptools = (project in file("dsptools")).
+  settings(commonSettings: _*).
+  settings(publishSettings: _*).
+  dependsOn(chisel_testers, rocketchip)
+
 lazy val firrtl = (project in file("firrtl")).
   settings(commonSettings: _*).
   settings(publishSettings: _*)
 
 lazy val firrtl_interpreter = (project in file("firrtl-interpreter")).
-  settings(commonSettings: _*).
-  settings(publishSettings: _*).
-  dependsOn(firrtl)
-
-lazy val treadle = (project in file("treadle")).
   settings(commonSettings: _*).
   settings(publishSettings: _*).
   dependsOn(firrtl)
@@ -102,6 +102,11 @@ lazy val testchipip = (project in file("testchipip")).
   settings(publishSettings: _*).
   dependsOn(rocketchip)
 
+lazy val treadle = (project in file("treadle")).
+  settings(commonSettings: _*).
+  settings(publishSettings: _*).
+  dependsOn(firrtl)
+
 lazy val chisel_release = (project in file (".")).
   settings(commonSettings: _*).
   settings(
@@ -110,7 +115,6 @@ lazy val chisel_release = (project in file (".")).
     publishArtifact := false,
     packagedArtifacts := Map.empty
   ).
-  dependsOn(firrtl).
-  aggregate(firrtl, chisel, firrtl_interpreter, treadle, chisel_testers, rocketchip, testchipip)
+  aggregate(firrtl, chisel, firrtl_interpreter, treadle, chisel_testers, rocketchip, dsptools, testchipip)
 
 buildInfoUsePackageAsPath := true

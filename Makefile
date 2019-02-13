@@ -1,10 +1,10 @@
-SBT=sbt
+SBT=sbt -Dsbt.ivy.home=/Users/rigge/src/chisel-release/ivy -DROCKET_USE_MAVEN ++2.12.4 
 
 # Until we integrate the deprepkg branch into master and sbt knows
 #  the true project/submodule dependencies, we need to execute sbt commands
 #  in a specific directory order and do a publishLocal at the end
 #  so the results are available to later submodules.
-EXPLICIT_SUBMODULES=firrtl firrtl-interpreter treadle chisel3 chisel-testers rocket-chip 
+EXPLICIT_SUBMODULES=firrtl firrtl-interpreter treadle chisel3 chisel-testers dsptools rocket-chip testchipip
 
 # dsptools
 
@@ -17,7 +17,7 @@ NEED_PUBLISHING = compile test +compile +test
 define doSBT
 $(eval publishlocal=$(if $(filter $(NEED_PUBLISHING),$(1)),$(if $(findstring +,$(1)),+publishLocal,publishLocal)))
 	for c in $(EXPLICIT_SUBMODULES); do ( echo $$c && cd $$c && $(SBT) $(1) $(publishlocal) ) || exit 1; done
-	echo dsptools && cd dsptools && $(SBT) "project rocket-dsptools" $(1) || exit 1
+	echo dsptools && cd dsptools && $(SBT) "rocket-dsptools/$(1)" || exit 1
 endef
 
 default compile:
@@ -31,7 +31,7 @@ coverage:
 	$(call doSBT, clean coverage test)
 	$(SBT) coverageReport coverageAggregate
 
-publish-local:
+publishLocal:
 	$(call doSBT,publishLocal)
 
 publishLocalSigned:
