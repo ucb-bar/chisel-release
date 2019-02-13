@@ -92,6 +92,11 @@ lazy val treadle = (project in file("treadle")).
   settings(publishSettings: _*).
   dependsOn(firrtl)
 
+lazy val diagrammer = (project in file("diagrammer")).
+  settings(commonSettings: _*).
+  settings(publishSettings: _*).
+  dependsOn(chisel, firrtl)
+
 lazy val chisel_release = (project in file (".")).
   settings(commonSettings: _*).
   settings(
@@ -101,6 +106,6 @@ lazy val chisel_release = (project in file (".")).
     packagedArtifacts := Map.empty
   ).
   dependsOn(firrtl).
-  aggregate(firrtl, chisel, firrtl_interpreter, treadle, chisel_testers)
+  aggregate(firrtl, chisel, firrtl_interpreter, treadle, chisel_testers, diagrammer)
 
 buildInfoUsePackageAsPath := true
