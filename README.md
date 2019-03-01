@@ -111,5 +111,7 @@ This change will cascade as downstream repositories bump the required versions o
 The exception to this are the example repositories (chisel-template and chisel-tutorial) which in principle should never have downstream repositories dependent on them, and which are intended to be built with the latest version of the current major release.
 
 [1] https://nvie.com/posts/a-successful-git-branching-model/
+
 [2] https://github.com/ucb-bar/chisel-release/blob/publicize/doc/publish-SNAPSHOT.md
+
 [3] https://github.com/ucb-bar/chisel-release/blob/publicize/doc/publish-release.md
