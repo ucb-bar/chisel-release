@@ -21,7 +21,7 @@
 	url = https://github.com/freechipsproject/diagrammer
 [submodule "rocket-chip"]
 	path = rocket-chip
-	url = git@github.com:grebe/rocket-chip.git
+	url = https://github.com/freechipsproject/rocket-chip.git
 [submodule "testchipip"]
 	path = testchipip
-	url = git@github.com:ucb-bar/testchipip.git
+	url = https://github.com/ucb-bar/testchipip.git
