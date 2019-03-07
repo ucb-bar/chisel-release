@@ -15,7 +15,13 @@
 	url = git@github.com:ucb-bar/dsptools.git
 [submodule "treadle"]
 	path = treadle
-	url = git@github.com:ucb-bar/treadle.git
+	url = https://github.com/freechipsproject/treadle.git
 [submodule "diagrammer"]
 	path = diagrammer
 	url = https://github.com/freechipsproject/diagrammer
+[submodule "rocket-chip"]
+	path = rocket-chip
+	url = https://github.com/freechipsproject/rocket-chip.git
+[submodule "testchipip"]
+	path = testchipip
+	url = https://github.com/ucb-bar/testchipip.git
