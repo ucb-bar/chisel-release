@@ -1,5 +1,5 @@
 IVY_DIR ?= $(HOME)/.ivy2
-SBT=sbt -Dsbt.ivy.home=$(IVY_DIR) -DROCKET_USE_MAVEN ++2.12.4 
+SBT=sbt -Dsbt.ivy.home=$(IVY_DIR) -DROCKET_USE_MAVEN ++2.12.4
 
 # Until we integrate the deprepkg branch into master and sbt knows
 #  the true project/submodule dependencies, we need to execute sbt commands
@@ -16,7 +16,7 @@ NEED_PUBLISHING = compile test +compile +test
 define doSBT
 $(eval publishlocal=$(if $(filter $(NEED_PUBLISHING),$(1)),$(if $(findstring +,$(1)),+publishLocal,publishLocal)))
 	for c in $(EXPLICIT_SUBMODULES); do ( echo $$c && cd $$c && $(SBT) $(1) $(publishlocal) ) || exit 1; done
-	echo dsptools && cd dsptools && $(SBT) "rocket-dsptools/$(1)" || exit 1
+	echo rocket-dsptools && cd dsptools && $(SBT) "project rocket-dsptools" "$(1)" || exit 1
 endef
 
 default compile:
