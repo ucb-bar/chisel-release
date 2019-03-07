@@ -51,7 +51,7 @@ done
 # If we're replacing the entire version string, limit the replacement
 #  to the actual version setting.
 if [[ $version != "" ]] ; then
-  gsed -E -i -e "/\bversion := /s/\"([[:digit:]]+\.[[:digit:]]+(-[^\"]+){0,1}\")(-SNAPSHOT){0,1}/\"$version\"/" $@
+  sed -E -i -e "/\bversion := /s/\"([[:digit:]]+\.[[:digit:]]+(-[^\"]+){0,1}\")(-SNAPSHOT){0,1}/\"$version\"/" $@
 else
-  gsed -E -i -e "/-SNAPSHOT/s/\"([[:digit:]]+\.[[:digit:]]+)(-SNAPSHOT){0,1}\"/\"\1-$versionPrefix\2\"/" $@
+  sed -E -i -e "/-SNAPSHOT/s/\"([[:digit:]]+\.[[:digit:]]+)(-SNAPSHOT){0,1}\"/\"\1-$versionPrefix\2\"/" $@
 fi
