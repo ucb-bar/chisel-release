@@ -1,5 +1,5 @@
 IVY_DIR ?= $(HOME)/.ivy2
-SBT=sbt -Dsbt.ivy.home=$(IVY_DIR) -DROCKET_USE_MAVEN ++2.12.4
+SBT=sbt -Dsbt.ivy.home=$(IVY_DIR) -DROCKET_USE_MAVEN
 
 # Until we integrate the deprepkg branch into master and sbt knows
 #  the true project/submodule dependencies, we need to execute sbt commands
