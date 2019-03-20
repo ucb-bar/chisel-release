@@ -16,3 +16,6 @@
 [submodule "treadle"]
 	path = treadle
 	url = git@github.com:freechipsproject/treadle.git
+[submodule "diagrammer"]
+	path = diagrammer
+	url = https://github.com/freechipsproject/diagrammer
