@@ -30,7 +30,7 @@ def javacOptionsVersion(scalaVersion: String): Seq[String] = {
   }
 }
 
-version := "3.1.6"
+version := "3.1.8"
 
 scalaVersion := "2.11.12"
 
