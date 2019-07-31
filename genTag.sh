@@ -5,4 +5,4 @@ else
   version=`../getVersion.sh`
 fi
 shift
-echo "-m \"master `git rev-parse --short \`git merge-base master HEAD\``\"" "$version"
+echo "-m \"master `git rev-parse --short \`git merge-base origin/master HEAD\``\"" "$version"
