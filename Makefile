@@ -5,7 +5,7 @@ SBT=sbt -Dsbt.ivy.home=$(IVY_DIR) -DROCKET_USE_MAVEN
 #  the true project/submodule dependencies, we need to execute sbt commands
 #  in a specific directory order and do a publishLocal at the end
 #  so the results are available to later submodules.
-EXPLICIT_SUBMODULES=firrtl firrtl-interpreter treadle chisel3 diagrammer chisel-testers dsptools rocket-chip testchipip
+EXPLICIT_SUBMODULES=firrtl firrtl-interpreter treadle chisel3 diagrammer chisel-testers dsptools rocket-chip
 
 # The following targets need a publishLocal so their results are available.
 NEED_PUBLISHING = compile test +compile +test
