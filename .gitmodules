@@ -30,7 +30,3 @@
 	path = rocket-chip
 	url = https://github.com/chipsalliance/rocket-chip.git
 	branch = 1.2.x
-[submodule "testchipip"]
-	path = testchipip
-	url = https://github.com/ucb-bar/testchipip.git
-	branch = 1.0.x
