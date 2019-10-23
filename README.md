@@ -112,6 +112,6 @@ The exception to this are the example repositories (chisel-template and chisel-t
 
 [1] https://nvie.com/posts/a-successful-git-branching-model/
 
-[2] https://github.com/ucb-bar/chisel-release/blob/publicize/doc/publish-SNAPSHOT.md
+[2] https://github.com/ucb-bar/chisel-release/blob/master/doc/publish-SNAPSHOT.md
 
-[3] https://github.com/ucb-bar/chisel-release/blob/publicize/doc/publish-release.md
+[3] https://github.com/ucb-bar/chisel-release/blob/master/doc/publish-release.md

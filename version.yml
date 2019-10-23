@@ -1,0 +1,167 @@
+chisel-testers:
+  moduleName: chisel-iotesters
+  paths:
+    chisel-testers/build.sbt:
+      moduleName: chisel-iotesters
+      version: &id001 !!python/object:version.Version.CNVersion
+        releaseQualifier: null
+        snapshotQualifier: '20191023'
+        theInts: !!python/tuple
+        - 1
+        - 3
+        - null
+    chisel-testers/build.sc:
+      moduleName: chisel-iotesters
+      version: *id001
+  version: *id001
+chisel3:
+  moduleName: chisel3
+  paths:
+    chisel3/build.sbt:
+      moduleName: chisel3
+      version: &id002 !!python/object:version.Version.CNVersion
+        releaseQualifier: null
+        snapshotQualifier: '20191023'
+        theInts: !!python/tuple
+        - 3
+        - 2
+        - null
+    chisel3/build.sc:
+      moduleName: chisel3
+      version: *id002
+  version: *id002
+diagrammer:
+  moduleName: firrtl-diagrammer
+  paths:
+    diagrammer/build.sbt:
+      moduleName: firrtl-diagrammer
+      version: &id003 !!python/object:version.Version.CNVersion
+        releaseQualifier: null
+        snapshotQualifier: '20191023'
+        theInts: !!python/tuple
+        - 1
+        - 1
+        - null
+    diagrammer/build.sc:
+      moduleName: firrtl-diagrammer
+      version: *id003
+  version: *id003
+dsptools:
+  moduleName: dsptools
+  paths:
+    dsptools/build.sbt:
+      moduleName: dsptools
+      version: &id004 !!python/object:version.Version.CNVersion
+        releaseQualifier: null
+        snapshotQualifier: '20191023'
+        theInts: !!python/tuple
+        - 1
+        - 2
+        - null
+  version: *id004
+firrtl:
+  moduleName: firrtl
+  paths:
+    firrtl/build.sbt:
+      moduleName: firrtl
+      version: &id005 !!python/object:version.Version.CNVersion
+        releaseQualifier: null
+        snapshotQualifier: '20191023'
+        theInts: !!python/tuple
+        - 1
+        - 2
+        - null
+  version: *id005
+firrtl-interpreter:
+  moduleName: firrtl-interpreter
+  paths:
+    firrtl-interpreter/build.sbt:
+      moduleName: firrtl-interpreter
+      version: &id006 !!python/object:version.Version.CNVersion
+        releaseQualifier: null
+        snapshotQualifier: '20191023'
+        theInts: !!python/tuple
+        - 1
+        - 2
+        - null
+    firrtl-interpreter/build.sc:
+      moduleName: firrtl-interpreter
+      version: *id006
+  version: *id006
+rocket-chip:
+  moduleName: rocketchip
+  paths:
+    rocket-chip/build.sbt:
+      moduleName: null
+      version: &id007 !!python/object:version.Version.CNVersion
+        releaseQualifier: null
+        snapshotQualifier: '20191023'
+        theInts: !!python/tuple
+        - 1
+        - 2
+        - null
+  version: *id007
+rocket-chip/chisel3:
+  moduleName: chisel3
+  paths:
+    rocket-chip/chisel3/build.sbt:
+      moduleName: chisel3
+      version: &id008 !!python/object:version.Version.CNVersion
+        releaseQualifier: null
+        snapshotQualifier: '20191023'
+        theInts: !!python/tuple
+        - 3
+        - 2
+        - null
+    rocket-chip/chisel3/build.sc:
+      moduleName: chisel3
+      version: !!python/object:version.Version.CNVersion
+        releaseQualifier: null
+        snapshotQualifier: '20191023'
+        theInts: !!python/tuple
+        - 3
+        - 2
+        - null
+  version: *id008
+rocket-chip/firrtl:
+  moduleName: firrtl
+  paths:
+    rocket-chip/firrtl/build.sbt:
+      moduleName: firrtl
+      version: &id009 !!python/object:version.Version.CNVersion
+        releaseQualifier: null
+        snapshotQualifier: '20191023'
+        theInts: !!python/tuple
+        - 1
+        - 2
+        - null
+  version: *id009
+rocket-chip/hardfloat:
+  moduleName: hardfloat
+  paths:
+    rocket-chip/hardfloat/build.sbt:
+      moduleName: hardfloat
+      version: &id010 !!python/object:version.Version.CNVersion
+        releaseQualifier: null
+        snapshotQualifier: '20191023'
+        theInts: !!python/tuple
+        - 1
+        - 2
+        - null
+  version: *id010
+treadle:
+  moduleName: treadle
+  paths:
+    treadle/build.sbt:
+      moduleName: treadle
+      version: &id011 !!python/object:version.Version.CNVersion
+        releaseQualifier: null
+        snapshotQualifier: '20191023'
+        theInts: !!python/tuple
+        - 1
+        - 1
+        - null
+    treadle/build.sc:
+      moduleName: treadle
+      version: *id011
+  version: *id011
