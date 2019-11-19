@@ -31,7 +31,7 @@ commands:
         default: ""
     steps:
       - attach_workspace:
-          at: /home/chisel-release
+          at: /home/chisel
 
       # Set environment
       - run: echo 'export PATH="/opt/verilator/verilator_4_016/bin:/opt/yosys/bin:$PATH"' >> $BASH_ENV
@@ -64,7 +64,7 @@ jobs:
 
 
       - persist_to_workspace:
-          root: /home/chisel-release
+          root: /home/chisel
           paths:
             - repo
             - .ivy2
@@ -76,7 +76,7 @@ jobs:
 
     steps:
       - attach_workspace:
-          at: /home/chisel-release
+          at: /home/chisel
 
       # publish FIRRTL
       - run:
@@ -85,7 +85,7 @@ jobs:
             (cd chisel-release/firrtl && cat /dev/null | sbt $SBT_ARGS +publishLocal)
 
       - persist_to_workspace:
-          root: /home/chisel-release
+          root: /home/chisel
           paths:
             - repo
             - .ivy2
@@ -99,13 +99,13 @@ jobs:
 
     steps:
       - attach_workspace:
-          at: /home/chisel-release
+          at: /home/chisel
 
       # publish chisel
       - run: date > date.chisel3 && (cd chisel-release/chisel3 && cat /dev/null | sbt $SBT_ARGS +publishLocal)
 
       - persist_to_workspace:
-          root: /home/chisel-release
+          root: /home/chisel
           paths:
             - repo
             - .ivy2
