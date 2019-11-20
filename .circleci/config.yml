@@ -55,8 +55,7 @@ jobs:
 
       - run:
           command: |
-            git submodule sync
-            git submodule update --init --recursive
+            (cd chisel-release && git submodule sync && git submodule update --init --recursive)
             date > date.prep
             printenv
             ls -l
