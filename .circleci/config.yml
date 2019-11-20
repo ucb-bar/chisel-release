@@ -126,7 +126,7 @@ jobs:
     executor: chisel-executor
     steps:
       - attach_workspace:
-          at: /home/chisel-release
+          at: /home/chisel
 
       - run:
           command: |
