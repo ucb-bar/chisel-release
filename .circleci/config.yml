@@ -416,7 +416,7 @@ jobs:
     steps:
       - restore-workspace
 
-      - build-component:
+      - publish-component:
           component: "dsptools"
           scalaVersion: "++2.12.10"
           sbtFlags: "'project rocket-dsptools'"
@@ -439,7 +439,7 @@ jobs:
       - restore-workspace
 
       # publish chisel
-      - build-component:
+      - publish-component:
           component: "rocket-chip"
           scalaVersion: "++2.12.10"
           sbtFlags: "-DROCKET_USE_MAVEN"
