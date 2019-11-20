@@ -53,7 +53,7 @@ commands:
     steps:
       - run:
           command: |
-            (cd chisel-release/<< parameters.component >> && cat /dev/null | sbt $SBT_ARGS publishLocal)
+            (cd chisel-release/<< parameters.component >> && cat /dev/null | sbt $SBT_ARGS << parameters.scalaVersion >> publishLocal)
 
   test-component:
     description: "Run component tests with a specific Scala version"
