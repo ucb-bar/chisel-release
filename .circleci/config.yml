@@ -107,13 +107,21 @@ jobs:
             ls -l
 
 
-      - save-workspace:
+      - persist_to_workspace:
+          root: /home/chisel
+          paths:
+            - repo
+            - .coursier
+            - .ivy2
+            - .m2
+            - .sbt
 
   build-firrtl:
     executor: chisel-executor
 
     steps:
-      - restore-workspace:
+      - attach_workspace:
+          at: /home/chisel
 
       # publish FIRRTL
       - publish-component:
@@ -123,7 +131,14 @@ jobs:
           component: "firrtl"
           scalaVersion: "++2.12.10"
 
-      - save-workspace:
+      - persist_to_workspace:
+          root: /home/chisel
+          paths:
+            - repo
+            - .coursier
+            - .ivy2
+            - .m2
+            - .sbt
 
   # Define a pure build chisel - currently unused since we can compile and test chisel in one step
   #  and we don't have downstream jobs that need the published version of chisel.
@@ -154,7 +169,8 @@ jobs:
   test-chisel-2_11:
     executor: chisel-executor
     steps:
-      - restore-workspace:
+      - attach_workspace:
+          at: /home/chisel
       - test-component:
           component: "chisel3"
           scalaVersion: "++2.11.12"
@@ -162,7 +178,8 @@ jobs:
   test-chisel-2_12:
     executor: chisel-executor
     steps:
-      - restore-workspace:
+      - attach_workspace:
+          at: /home/chisel
       - test-component:
           component: "chisel3"
           scalaVersion: "++2.12.10"
@@ -170,7 +187,8 @@ jobs:
   checkstyle-chisel:
     executor: chisel-executor
     steps:
-      - restore-workspace:
+      - attach_workspace:
+          at: /home/chisel
 
       - checkstyle-component:
           component: "chisel3"
