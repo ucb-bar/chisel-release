@@ -134,7 +134,7 @@ jobs:
 
       - save-workspace
 
-  test-firrtl-2.11:
+  test-firrtl-2_11:
     executor: chisel-executor
 
     steps:
@@ -143,7 +143,7 @@ jobs:
           component: "firrtl"
           scalaVersion: "++2.11.12"
 
-  test-firrtl-2.12:
+  test-firrtl-2_12:
     executor: chisel-executor
 
     steps:
@@ -210,7 +210,7 @@ jobs:
 
       - save-workspace
 
-  test-firrtl-interpreter-2.11:
+  test-firrtl-interpreter-2_11:
     executor: chisel-executor
 
     steps:
@@ -220,7 +220,7 @@ jobs:
           component: "firrtl-interpreter"
           scalaVersion: "++2.11.12"
 
-  test-firrtl-interpreter-2.12:
+  test-firrtl-interpreter-2_12:
     executor: chisel-executor
 
     steps:
@@ -246,7 +246,7 @@ jobs:
 
       - save-workspace
 
-  test-treadle-2.11:
+  test-treadle-2_11:
     executor: chisel-executor
 
     steps:
@@ -256,7 +256,7 @@ jobs:
           component: "treadle"
           scalaVersion: "++2.11.12"
 
-  test-treadle-2.12:
+  test-treadle-2_12:
     executor: chisel-executor
 
     steps:
@@ -282,7 +282,7 @@ jobs:
 
       - save-workspace
 
-  test-diagrammer-2.11:
+  test-diagrammer-2_11:
     executor: chisel-executor
 
     steps:
@@ -292,7 +292,7 @@ jobs:
           component: "diagrammer"
           scalaVersion: "++2.11.12"
 
-  test-diagrammer-2.12:
+  test-diagrammer-2_12:
     executor: chisel-executor
 
     steps:
@@ -318,7 +318,7 @@ jobs:
 
       - save-workspace
 
-  test-chisel-testers-2.11:
+  test-chisel-testers-2_11:
     executor: chisel-executor
 
     steps:
@@ -328,7 +328,7 @@ jobs:
           component: "chisel-testers"
           scalaVersion: "++2.11.12"
 
-  test-chisel-testers-2.12:
+  test-chisel-testers-2_12:
     executor: chisel-executor
 
     steps:
@@ -354,7 +354,7 @@ jobs:
 
       - save-workspace
 
-  test-chisel-testers2-2.11:
+  test-chisel-testers2-2_11:
     executor: chisel-executor
 
     steps:
@@ -364,7 +364,7 @@ jobs:
           component: "chisel-testers2"
           scalaVersion: "++2.11.12"
 
-  test-chisel-testers2-2.12:
+  test-chisel-testers2-2_12:
     executor: chisel-executor
 
     steps:
@@ -390,7 +390,7 @@ jobs:
 
       - save-workspace
 
-  test-dsptools-2.11:
+  test-dsptools-2_11:
     executor: chisel-executor
 
     steps:
@@ -400,7 +400,7 @@ jobs:
           component: "dsptools"
           scalaVersion: "++2.11.12"
 
-  test-dsptools-2.12:
+  test-dsptools-2_12:
     executor: chisel-executor
 
     steps:
@@ -421,7 +421,7 @@ jobs:
           scalaVersion: "++2.12.10"
           sbtFlags: "'project rocket-dsptools'"
 
-  test-rocket-dsptools-2.12:
+  test-rocket-dsptools-2_12:
     executor: chisel-executor
 
     steps:
@@ -446,7 +446,7 @@ jobs:
 
       - save-workspace
 
-  test-rocket-chip-2.12:
+  test-rocket-chip-2_12:
     executor: chisel-executor
 
     steps:
