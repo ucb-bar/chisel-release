@@ -23,15 +23,47 @@ executors:
       SBT_ARGS: ""
 
 commands:
-  test-chisel:
-    description: "Run chisel tests with a specific Scala version"
+  restore-workspace:
+    description: "Attach to workspace"
+    steps:
+      - attach_workspace:
+          at: /home/chisel
+
+  save-workspace:
+    description: "Save workspace"
+    steps:
+      root: /home/chisel
+      paths:
+        - repo
+        - .coursier
+        - .ivy2
+        - .m2
+        - .sbt
+
+  publish-component:
+    description: "Publish a component"
     parameters:
+      component:
+        type: string
+        default: ""
       scalaVersion:
         type: string
         default: ""
     steps:
-      - attach_workspace:
-          at: /home/chisel
+      - run:
+          command: |
+            (cd chisel-release/<< parameters.component >> && cat /dev/null | sbt $SBT_ARGS publishLocal)
+
+  test-component:
+    description: "Run component tests with a specific Scala version"
+    parameters:
+      component:
+        type: string
+        default: ""
+      scalaVersion:
+        type: string
+        default: ""
+    steps:
 
       # Set environment
       - run: echo 'export PATH="/opt/verilator/verilator_4_016/bin:/opt/yosys/bin:$PATH"' >> $BASH_ENV
@@ -41,7 +73,20 @@ commands:
       # We currently run them separately so we can run them in parallel.
       - run:
           command: |
-            (cd chisel-release/chisel3 && cat /dev/null | sbt $SBT_ARGS -DminimalResources << parameters.scalaVersion >> test)
+            (cd chisel-release/<< parameters.component >> && cat /dev/null | sbt $SBT_ARGS -DminimalResources << parameters.scalaVersion >> test)
+
+  checkstyle-component:
+    description: "Verify coding style"
+    parameters:
+      component:
+        type: string
+        default: ""
+    steps:
+
+      - run:
+          command: |
+            # We expect the "[info]" field from sbt so the warning count will be in column 4
+            (cd chisel-release/<< parameters.component >> && cat /dev/null | sbt $SBT_ARGS scalastyle | gawk -v WARN_FAIL=2 -e '/scalastyle Found [0-9]+ warnings/ { print $0; if ($4 > ENVIRON["CHECKSTYLE_LIMIT"]) WARN_FAIL=1; else if (WARN_FAIL == 2) WARN_FAIL=0 }' -e 'END { exit WARN_FAIL}')
 
 jobs:
   build-prep:
@@ -61,34 +106,23 @@ jobs:
             ls -l
 
 
-      - persist_to_workspace:
-          root: /home/chisel
-          paths:
-            - repo
-            - .ivy2
-            - .m2
-            - .sbt
+      - save-workspace:
 
   build-firrtl:
     executor: chisel-executor
 
     steps:
-      - attach_workspace:
-          at: /home/chisel
+      - restore-workspace:
 
       # publish FIRRTL
-      - run:
-          command: |
-            date > date.firrtl
-            (cd chisel-release/firrtl && cat /dev/null | sbt $SBT_ARGS +publishLocal)
+      - publish-component:
+          component: "firrtl"
+          scalaVersion: "++2.11.12"
+      - publish-component:
+          component: "firrtl"
+          scalaVersion: "++2.12.10"
 
-      - persist_to_workspace:
-          root: /home/chisel
-          paths:
-            - repo
-            - .ivy2
-            - .m2
-            - .sbt
+      - save-workspace:
 
   # Define a pure build chisel - currently unused since we can compile and test chisel in one step
   #  and we don't have downstream jobs that need the published version of chisel.
@@ -96,42 +130,39 @@ jobs:
     executor: chisel-executor
 
     steps:
-      - attach_workspace:
-          at: /home/chisel
+      - restore-workspace:
 
       # publish chisel
-      - run: date > date.chisel3 && (cd chisel-release/chisel3 && cat /dev/null | sbt $SBT_ARGS +publishLocal)
+      - publish-component:
+          component: "chisel3"
+          scalaVersion: "++2.11.12"
+      - publish-component:
+          component: "chisel3"
+          scalaVersion: "++2.12.10"
 
-      - persist_to_workspace:
-          root: /home/chisel
-          paths:
-            - repo
-            - .ivy2
-            - .m2
-            - .sbt
+      - save-workspace:
 
   test-chisel-2_11:
     executor: chisel-executor
     steps:
-      - test-chisel:
+      - test-component:
+          component: "chisel3"
           scalaVersion: "++2.11.12"
 
   test-chisel-2_12:
     executor: chisel-executor
     steps:
-      - test-chisel:
+      - test-component:
+          component: "chisel3"
           scalaVersion: "++2.12.10"
 
   checkstyle-chisel:
     executor: chisel-executor
     steps:
-      - attach_workspace:
-          at: /home/chisel
+      - restore-workspace:
 
-      - run:
-          command: |
-            # We expect the "[info]" field from sbt so the warning count will be in column 4
-            (cd chisel-release/chisel3 && cat /dev/null | sbt $SBT_ARGS scalastyle | gawk -v WARN_FAIL=2 -e '/scalastyle Found [0-9]+ warnings/ { print $0; if ($4 > ENVIRON["CHECKSTYLE_LIMIT"]) WARN_FAIL=1; else if (WARN_FAIL == 2) WARN_FAIL=0 }' -e 'END { exit WARN_FAIL}')
+      - checkstyle-component:
+          component: "chisel3"
 
 workflows:
 
