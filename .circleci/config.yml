@@ -34,13 +34,14 @@ commands:
     description: "Save workspace"
     parameters:
     steps:
-      root: /home/chisel
-      paths:
-        - repo
-        - .coursier
-        - .ivy2
-        - .m2
-        - .sbt
+      - persist_to_workspace:
+          root: /home/chisel
+          paths:
+            - repo
+            - .coursier
+            - .ivy2
+            - .m2
+            - .sbt
 
   publish-component:
     description: "Publish a component"
