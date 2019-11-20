@@ -35,7 +35,6 @@ commands:
       - persist_to_workspace:
           root: /home/chisel
           paths:
-#            - repo
             - .coursier
             - .ivy2
             - .m2
@@ -50,10 +49,13 @@ commands:
       scalaVersion:
         type: string
         default: ""
+      sbtFlags:
+        type: string
+        default: ""
     steps:
       - run:
           command: |
-            (cd chisel-release/<< parameters.component >> && cat /dev/null | sbt $SBT_ARGS << parameters.scalaVersion >> publishLocal)
+            (cd chisel-release/<< parameters.component >> && cat /dev/null | sbt $SBT_ARGS << parameters.sbtFlags >> << parameters.scalaVersion >> publishLocal)
 
   test-component:
     description: "Run component tests with a specific Scala version"
@@ -123,14 +125,32 @@ jobs:
       - restore-workspace
 
       # publish FIRRTL
-#      - publish-component:
-#          component: "firrtl"
-#          scalaVersion: "++2.11.12"
+      - publish-component:
+          component: "firrtl"
+          scalaVersion: "++2.11.12"
       - publish-component:
           component: "firrtl"
           scalaVersion: "++2.12.10"
 
       - save-workspace
+
+  test-firrtl-2.11:
+    executor: chisel-executor
+
+    steps:
+      - restore-workspace
+      - test-component:
+          component: "firrtl"
+          scalaVersion: "++2.11.12"
+
+  test-firrtl-2.12:
+    executor: chisel-executor
+
+    steps:
+      - restore-workspace
+      - test-component:
+          component: "firrtl"
+          scalaVersion: "++2.12.10"
 
   # Define a pure build chisel - currently unused since we can compile and test chisel in one step
   #  and we don't have downstream jobs that need the published version of chisel.
@@ -138,8 +158,7 @@ jobs:
     executor: chisel-executor
 
     steps:
-      - attach_workspace:
-          at: /home/chisel
+      - restore-workspace
 
       # publish chisel
       - publish-component:
@@ -149,20 +168,12 @@ jobs:
           component: "chisel3"
           scalaVersion: "++2.12.10"
 
-      - persist_to_workspace:
-          root: /home/chisel
-          paths:
-#            - repo
-            - .coursier
-            - .ivy2
-            - .m2
-            - .sbt
+      - save-workspace
 
   test-chisel-2_11:
     executor: chisel-executor
     steps:
-      - attach_workspace:
-          at: /home/chisel
+      - restore-workspace
       - test-component:
           component: "chisel3"
           scalaVersion: "++2.11.12"
@@ -170,8 +181,7 @@ jobs:
   test-chisel-2_12:
     executor: chisel-executor
     steps:
-      - attach_workspace:
-          at: /home/chisel
+      - restore-workspace
       - test-component:
           component: "chisel3"
           scalaVersion: "++2.12.10"
@@ -179,11 +189,274 @@ jobs:
   checkstyle-chisel:
     executor: chisel-executor
     steps:
-      - attach_workspace:
-          at: /home/chisel
+      - restore-workspace
 
       - checkstyle-component:
           component: "chisel3"
+
+  build-firrtl-interpreter:
+    executor: chisel-executor
+
+    steps:
+      - restore-workspace
+
+      # publish chisel
+      - publish-component:
+          component: "firrtl-interpreter"
+          scalaVersion: "++2.11.12"
+      - publish-component:
+          component: "firrtl-interpreter"
+          scalaVersion: "++2.12.10"
+
+      - save-workspace
+
+  test-firrtl-interpreter-2.11:
+    executor: chisel-executor
+
+    steps:
+      - restore-workspace
+
+      - test-component:
+          component: "firrtl-interpreter"
+          scalaVersion: "++2.11.12"
+
+  test-firrtl-interpreter-2.12:
+    executor: chisel-executor
+
+    steps:
+      - restore-workspace
+
+      - test-component:
+          component: "firrtl-interpreter"
+          scalaVersion: "++2.12.10"
+
+  build-treadle:
+    executor: chisel-executor
+
+    steps:
+      - restore-workspace
+
+      # publish chisel
+      - publish-component:
+          component: "treadle"
+          scalaVersion: "++2.11.12"
+      - publish-component:
+          component: "treadle"
+          scalaVersion: "++2.12.10"
+
+      - save-workspace
+
+  test-treadle-2.11:
+    executor: chisel-executor
+
+    steps:
+      - restore-workspace
+
+      - test-component:
+          component: "treadle"
+          scalaVersion: "++2.11.12"
+
+  test-treadle-2.12:
+    executor: chisel-executor
+
+    steps:
+      - restore-workspace
+
+      - test-component:
+          component: "treadle"
+          scalaVersion: "++2.12.10"
+
+  build-diagrammer:
+    executor: chisel-executor
+
+    steps:
+      - restore-workspace
+
+      # publish diagrammer
+      - publish-component:
+          component: "diagrammer"
+          scalaVersion: "++2.11.12"
+      - publish-component:
+          component: "diagrammer"
+          scalaVersion: "++2.12.10"
+
+      - save-workspace
+
+  test-diagrammer-2.11:
+    executor: chisel-executor
+
+    steps:
+      - restore-workspace
+
+      - test-component:
+          component: "diagrammer"
+          scalaVersion: "++2.11.12"
+
+  test-diagrammer-2.12:
+    executor: chisel-executor
+
+    steps:
+      - restore-workspace
+
+      - test-component:
+          component: "diagrammer"
+          scalaVersion: "++2.12.10"
+
+  build-chisel-testers:
+    executor: chisel-executor
+
+    steps:
+      - restore-workspace
+
+      # publish chisel
+      - publish-component:
+          component: "chisel-testers"
+          scalaVersion: "++2.11.12"
+      - publish-component:
+          component: "chisel-testers"
+          scalaVersion: "++2.12.10"
+
+      - save-workspace
+
+  test-chisel-testers-2.11:
+    executor: chisel-executor
+
+    steps:
+      - restore-workspace
+
+      - test-component:
+          component: "chisel-testers"
+          scalaVersion: "++2.11.12"
+
+  test-chisel-testers-2.12:
+    executor: chisel-executor
+
+    steps:
+      - restore-workspace
+
+      - test-component:
+          component: "chisel-testers"
+          scalaVersion: "++2.12.10"
+
+  build-chisel-testers2:
+    executor: chisel-executor
+
+    steps:
+      - restore-workspace
+
+      # publish chisel
+      - publish-component:
+          component: "chisel-testers2"
+          scalaVersion: "++2.11.12"
+      - publish-component:
+          component: "chisel-testers2"
+          scalaVersion: "++2.12.10"
+
+      - save-workspace
+
+  test-chisel-testers2-2.11:
+    executor: chisel-executor
+
+    steps:
+      - restore-workspace
+
+      - test-component:
+          component: "chisel-testers2"
+          scalaVersion: "++2.11.12"
+
+  test-chisel-testers2-2.12:
+    executor: chisel-executor
+
+    steps:
+      - restore-workspace
+
+      - test-component:
+          component: "chisel-testers2"
+          scalaVersion: "++2.12.10"
+
+  build-dsptools:
+    executor: chisel-executor
+
+    steps:
+      - restore-workspace
+
+      # publish chisel
+      - publish-component:
+          component: "dsptools"
+          scalaVersion: "++2.11.12"
+      - publish-component:
+          component: "dsptools"
+          scalaVersion: "++2.12.10"
+
+      - save-workspace
+
+  test-dsptools-2.11:
+    executor: chisel-executor
+
+    steps:
+      - restore-workspace
+
+      - test-component:
+          component: "dsptools"
+          scalaVersion: "++2.11.12"
+
+  test-dsptools-2.12:
+    executor: chisel-executor
+
+    steps:
+      - restore-workspace
+
+      - test-component:
+          component: "dsptools"
+          scalaVersion: "++2.12.10"
+
+  build-rocket-dsptools:
+    executor: chisel-executor
+
+    steps:
+      - restore-workspace
+
+      - build-component:
+          component: "dsptools"
+          scalaVersion: "++2.12.10"
+          sbtFlags: "'project rocket-dsptools'"
+
+  test-rocket-dsptools-2.12:
+    executor: chisel-executor
+
+    steps:
+      - restore-workspace
+
+      - test-component:
+          component: "dsptools"
+          scalaVersion: "++2.12.10"
+          sbtFlags: "'project rocket-dsptools'"
+
+  build-rocket-chip:
+    executor: chisel-executor
+
+    steps:
+      - restore-workspace
+
+      # publish chisel
+      - build-component:
+          component: "rocket-chip"
+          scalaVersion: "++2.12.10"
+          sbtFlags: "-DROCKET_USE_MAVEN"
+
+      - save-workspace
+
+  test-rocket-chip-2.12:
+    executor: chisel-executor
+
+    steps:
+      - restore-workspace
+
+      # publish chisel
+      - test-component:
+          component: "rocket-chip"
+          scalaVersion: "++2.12.10"
+          sbtFlags: "-DROCKET_USE_MAVEN"
 
 workflows:
 
@@ -193,17 +466,113 @@ workflows:
       - build-firrtl:
           requires:
             - build-prep
-#      - test-chisel-2_11:
-#          requires:
-#            - build-firrtl
-#      - test-chisel-2_12:
-#          requires:
-#            - build-firrtl
-#      - checkstyle-chisel:
+      - build-chisel:
+          requires:
+            - build-firrtl
+      - build-treadle:
+          requires:
+            - build-firrtl
+      - build-firrtl-interpreter:
+          requires:
+            - build-firrtl
+      - build-chisel-testers2:
+          requires:
+            - build-firrtl
+            - build-chisel
+      - build-chisel-testers:
+          requires:
+            - build-firrtl
+            - build-chisel
+      - build-diagrammer:
+          requires:
+            - build-chisel
+      - build-dsptools:
+          requires:
+            - build-chisel
+            - build-treadle
+            - build-firrtl-interpreter
+            - build-chisel-testers
+            - build-chisel-testers2
+      - build-rocket-chip:
+          requires:
+            - build-chisel
+            - build-treadle
+            - build-firrtl-interpreter
+            - build-chisel-testers
+            - build-chisel-testers2
+      - build-rocket-dsptools:
+          requires:
+            - build-chisel
+            - build-treadle
+            - build-firrtl-interpreter
+            - build-chisel-testers
+            - build-chisel-testers2
+            - build-rocket-chip
+      - test-firrtl-2_11:
+          requires:
+            - build-firrtl
+      - test-firrtl-2_12:
+          requires:
+            - build-firrtl
+      - test-firrtl-interpreter-2_11:
+          requires:
+            - build-firrtl-interpreter
+      - test-firrtl-interpreter-2_12:
+          requires:
+            - build-firrtl-interpreter
+      - test-treadle-2_11:
+          requires:
+            - build-treadle
+      - test-treadle-2_12:
+          requires:
+            - build-treadle
+      - test-chisel-2_11:
+          requires:
+            - build-chisel
+      - test-chisel-2_12:
+          requires:
+            - build-chisel
+      - checkstyle-chisel:
           # Strictly speaking, this is only dependent on build-firrtl,
           #  but it is faster than the test jobs so if it fails,
           #  it fails the entire build before we get a chance to complete the tests.
           # If we make it dependent on at least one of the tests,
           #  there's a better chance to see if the tests fail before we flag a style failure
-#          requires:
-#            - test-chisel-2_12
+          requires:
+            - test-chisel-2_12
+      - test-diagrammer-2_11:
+          requires:
+            - build-diagrammer
+      - test-diagrammer-2_12:
+          requires:
+            - build-diagrammer
+      - test-chisel-testers-2_11:
+          requires:
+            - build-chisel-testers
+      - test-chisel-testers-2_12:
+          requires:
+            - build-chisel-testers
+      - test-chisel-testers2-2_11:
+          requires:
+            - build-chisel-testers2
+      - test-chisel-testers2-2_12:
+          requires:
+            - build-chisel-testers2
+      - test-dsptools-2_11:
+          requires:
+            - build-dsptools
+      - test-dsptools-2_12:
+          requires:
+            - build-dsptools
+      - test-chisel-testers-2_11:
+          requires:
+            - build-chisel-testers
+      - test-chisel-testers-2_12:
+          requires:
+            - build-chisel-testers
+      - test-rocket-chip-2_12:
+          requires:
+            - build-rocket-chip
+      - test-rocket-dsptools-2_12:
+          requires:
+            - build-rocket-dsptools
