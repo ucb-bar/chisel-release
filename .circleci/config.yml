@@ -131,7 +131,8 @@ jobs:
     executor: chisel-executor
 
     steps:
-      - restore-workspace:
+      - attach_workspace:
+          at: /home/chisel
 
       # publish chisel
       - publish-component:
@@ -141,11 +142,19 @@ jobs:
           component: "chisel3"
           scalaVersion: "++2.12.10"
 
-      - save-workspace:
+      - persist_to_workspace:
+          root: /home/chisel
+          paths:
+            - repo
+            - .coursier
+            - .ivy2
+            - .m2
+            - .sbt
 
   test-chisel-2_11:
     executor: chisel-executor
     steps:
+      - restore-workspace:
       - test-component:
           component: "chisel3"
           scalaVersion: "++2.11.12"
@@ -153,6 +162,7 @@ jobs:
   test-chisel-2_12:
     executor: chisel-executor
     steps:
+      - restore-workspace:
       - test-component:
           component: "chisel3"
           scalaVersion: "++2.12.10"
