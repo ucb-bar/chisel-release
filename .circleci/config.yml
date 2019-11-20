@@ -25,14 +25,12 @@ executors:
 commands:
   restore-workspace:
     description: "Attach to workspace"
-    parameters:
     steps:
       - attach_workspace:
           at: /home/chisel
 
   save-workspace:
     description: "Save workspace"
-    parameters:
     steps:
       - persist_to_workspace:
           root: /home/chisel
