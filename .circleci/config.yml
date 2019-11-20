@@ -66,6 +66,9 @@ commands:
       scalaVersion:
         type: string
         default: ""
+      sbtFlags:
+        type: string
+        default: ""
     steps:
 
       # Set environment
