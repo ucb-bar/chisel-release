@@ -464,9 +464,6 @@ jobs:
 workflows:
 
   build_and_test:
-    filters:
-      only:
-        - circleci
     jobs:
       - build-prep
       - build-firrtl:
