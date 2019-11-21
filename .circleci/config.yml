@@ -464,6 +464,9 @@ jobs:
 workflows:
 
   build_and_test:
+    filters:
+      only:
+        - circleci
     jobs:
       - build-prep
       - build-firrtl:
@@ -482,10 +485,14 @@ workflows:
           requires:
             - build-firrtl
             - build-chisel
+            - build-treadle
+            - build-firrtl-interpreter
       - build-chisel-testers:
           requires:
             - build-firrtl
             - build-chisel
+            - build-treadle
+            - build-firrtl-interpreter
       - build-diagrammer:
           requires:
             - build-chisel
