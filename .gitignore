@@ -257,3 +257,4 @@ hs_err_pid*
 /*.firrtl_interpreter.vcd
 
 /lib
+/ivy
