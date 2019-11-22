@@ -29,7 +29,7 @@
 [submodule "rocket-chip"]
 	path = rocket-chip
 	url = https://github.com/chipsalliance/rocket-chip.git
-	branch = master
+	branch = ucb-jenkins
 [submodule "chisel-testers2"]
 	path = chisel-testers2
 	url = https://github.com/ucb-bar/chisel-testers2.git
