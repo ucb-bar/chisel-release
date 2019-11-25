@@ -33,4 +33,4 @@
 [submodule "chisel-testers2"]
 	path = chisel-testers2
 	url = https://github.com/ucb-bar/chisel-testers2.git
-	branch = 0.2.x
+	branch = 0.1.x
