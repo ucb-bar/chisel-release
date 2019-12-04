@@ -16,11 +16,11 @@ executors:
 
     environment:
       # Customize the JVM maximum heap limit
-      JVM_OPTS: -Xmx3200m
+      JVM_OPTS: -Xmx3072m
       TERM: dumb
       RELEASE_REV: origin/master
       CHECKSTYLE_LIMIT: 40
-      SBT_ARGS: ""
+      SBT_ARGS: "; set ThisBuild / parallelExecution := false; set ThisBuild / fork := false; set ThisBuild / testForkedParallel := false"
 
 commands:
   restore-workspace:
