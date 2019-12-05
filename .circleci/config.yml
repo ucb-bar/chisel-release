@@ -31,14 +31,15 @@ commands:
 
   save-workspace:
     description: "Save workspace"
+    parameters:
+      package:
+        type: string
+        default: ""
     steps:
       - persist_to_workspace:
           root: /home/chisel
           paths:
-            - .coursier
-            - .ivy2
-            - .m2
-            - .sbt
+            - .ivy2/local/edu.berkeley.cs/<< parameters.package >>
 
   publish-component:
     description: "Publish a component"
@@ -131,11 +132,20 @@ jobs:
       - publish-component:
           component: "firrtl"
           scalaVersion: "++2.11.12"
+      - save-workspace:
+          package: "firrtl_2.11"
       - publish-component:
           component: "firrtl"
           scalaVersion: "++2.12.10"
-
-      - save-workspace
+      - save-workspace:
+          package: "firrtl_2.12"
+      - save_cache:
+          paths:
+            - ~/.coursier
+            - ~/.ivy2
+            - ~/.m2
+            - ~/.sbt
+          key: v1-dep--firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
 
   test-firrtl-2_11:
     executor: chisel-executor
@@ -162,21 +172,40 @@ jobs:
 
     steps:
       - restore-workspace
+      - restore_cache:
+          keys:
+            - v1-dep--firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dep--firrtl
 
       # publish chisel
       - publish-component:
           component: "chisel3"
           scalaVersion: "++2.11.12"
+      - save-workspace:
+          package: "chisel3.11"
       - publish-component:
           component: "chisel3"
           scalaVersion: "++2.12.10"
-
-      - save-workspace
+      - save-workspace:
+          package: "chisel3.12"
+      - save_cache:
+          paths:
+            - ~/.coursier
+            - ~/.ivy2
+            - ~/.m2
+            - ~/.sbt
+          key: v1-dep--chisel3--{{ checksum "chisel-release/chisel3/build.sbt" }}--{{ checksum "chisel-release/chisel3/project/plugins.sbt" }}
 
   test-chisel-2_11:
     executor: chisel-executor
     steps:
       - restore-workspace
+      - restore_cache:
+          keys:
+            - v1-dep--firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dep--firrtl
       - test-component:
           component: "chisel3"
           scalaVersion: "++2.11.12"
@@ -185,6 +214,11 @@ jobs:
     executor: chisel-executor
     steps:
       - restore-workspace
+      - restore_cache:
+          keys:
+            - v1-dep--firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dep--firrtl
       - test-component:
           component: "chisel3"
           scalaVersion: "++2.12.10"
@@ -193,6 +227,12 @@ jobs:
     executor: chisel-executor
     steps:
       - restore-workspace
+      - restore_cache:
+          keys:
+            - v1-dep--chisel3--{{ checksum "chisel-release/chisel3/build.sbt" }}--{{ checksum "chisel-release/chisel3/project/plugins.sbt" }}
+            - v1-dep--firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dep--firrtl
 
       - checkstyle-component:
           component: "chisel3"
@@ -202,22 +242,43 @@ jobs:
 
     steps:
       - restore-workspace
+      - restore_cache:
+          keys:
+            - v1-dep--firrtl-interpreter--{{ checksum "chisel-release/firrtl-interpreter/build.sbt" }}--{{ checksum "chisel-release/firrtl-interpreter/project/plugins.sbt" }}
+            - v1-dep--firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dep--firrtl
 
-      # publish chisel
+      # publish firrtl-interpreter
       - publish-component:
           component: "firrtl-interpreter"
           scalaVersion: "++2.11.12"
+      - save-workspace:
+          package: "firrtl-interpreter_2.11"
       - publish-component:
           component: "firrtl-interpreter"
           scalaVersion: "++2.12.10"
-
-      - save-workspace
+      - save-workspace:
+          package: "firrtl-interpreter_2.12"
+      - save_cache:
+          paths:
+            - ~/.coursier
+            - ~/.ivy2
+            - ~/.m2
+            - ~/.sbt
+          key: v1-dep--firrtl-interpreter--{{ checksum "chisel-release/firrtl-interpreter/build.sbt" }}--{{ checksum "chisel-release/firrtl-interpreter/project/plugins.sbt" }}
 
   test-firrtl-interpreter-2_11:
     executor: chisel-executor
 
     steps:
       - restore-workspace
+      - restore_cache:
+          keys:
+            - v1-dep--firrtl-interpreter--{{ checksum "chisel-release/firrtl-interpreter/build.sbt" }}--{{ checksum "chisel-release/firrtl-interpreter/project/plugins.sbt" }}
+            - v1-dep--firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dep--firrtl
 
       - test-component:
           component: "firrtl-interpreter"
@@ -228,6 +289,12 @@ jobs:
 
     steps:
       - restore-workspace
+      - restore_cache:
+          keys:
+            - v1-dep--firrtl-interpreter--{{ checksum "chisel-release/firrtl-interpreter/build.sbt" }}--{{ checksum "chisel-release/firrtl-interpreter/project/plugins.sbt" }}
+            - v1-dep--firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dep--firrtl
 
       - test-component:
           component: "firrtl-interpreter"
@@ -238,22 +305,43 @@ jobs:
 
     steps:
       - restore-workspace
+      - restore_cache:
+          keys:
+            - v1-dep--treadle--{{ checksum "chisel-release/treadle/build.sbt" }}--{{ checksum "chisel-release/treadle/project/plugins.sbt" }}
+            - v1-dep--firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dep--firrtl
 
-      # publish chisel
+      # publish treadle
       - publish-component:
           component: "treadle"
           scalaVersion: "++2.11.12"
+      - save-workspace:
+          package: "treadle_2.11"
       - publish-component:
           component: "treadle"
           scalaVersion: "++2.12.10"
-
-      - save-workspace
+      - save-workspace:
+          package: "treadle_2.12"
+      - save_cache:
+          paths:
+            - ~/.coursier
+            - ~/.ivy2
+            - ~/.m2
+            - ~/.sbt
+          key: v1-dep--treadle--{{ checksum "chisel-release/treadle/build.sbt" }}--{{ checksum "chisel-release/treadle/project/plugins.sbt" }}
 
   test-treadle-2_11:
     executor: chisel-executor
 
     steps:
       - restore-workspace
+      - restore_cache:
+          keys:
+            - v1-dep--treadle--{{ checksum "chisel-release/treadle/build.sbt" }}--{{ checksum "chisel-release/treadle/project/plugins.sbt" }}
+            - v1-dep--firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dep--firrtl
 
       - test-component:
           component: "treadle"
@@ -264,6 +352,12 @@ jobs:
 
     steps:
       - restore-workspace
+      - restore_cache:
+          keys:
+            - v1-dep--treadle--{{ checksum "chisel-release/treadle/build.sbt" }}--{{ checksum "chisel-release/treadle/project/plugins.sbt" }}
+            - v1-dep--firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dep--firrtl
 
       - test-component:
           component: "treadle"
@@ -274,22 +368,45 @@ jobs:
 
     steps:
       - restore-workspace
+      - restore_cache:
+          keys:
+            - v1-dep--diagrammer--{{ checksum "chisel-release/diagrammer/build.sbt" }}--{{ checksum "chisel-release/diagrammer/project/plugins.sbt" }}
+            - v1-dep--chisel3--{{ checksum "chisel-release/chisel3/build.sbt" }}--{{ checksum "chisel-release/chisel3/project/plugins.sbt" }}
+            - v1-dep--firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dep--firrtl
 
       # publish diagrammer
       - publish-component:
           component: "diagrammer"
           scalaVersion: "++2.11.12"
+      - save-workspace:
+          package: "firrtl-diagrammer_2.11"
       - publish-component:
           component: "diagrammer"
           scalaVersion: "++2.12.10"
-
-      - save-workspace
+      - save-workspace:
+          package: "firrtl-diagrammer_2.12"
+      - save_cache:
+          paths:
+            - ~/.coursier
+            - ~/.ivy2
+            - ~/.m2
+            - ~/.sbt
+          key: v1-dep--diagrammer--{{ checksum "chisel-release/diagrammer/build.sbt" }}--{{ checksum "chisel-release/diagrammer/project/plugins.sbt" }}
 
   test-diagrammer-2_11:
     executor: chisel-executor
 
     steps:
       - restore-workspace
+      - restore_cache:
+          keys:
+            - v1-dep--diagrammer--{{ checksum "chisel-release/diagrammer/build.sbt" }}--{{ checksum "chisel-release/diagrammer/project/plugins.sbt" }}
+            - v1-dep--chisel3--{{ checksum "chisel-release/chisel3/build.sbt" }}--{{ checksum "chisel-release/chisel3/project/plugins.sbt" }}
+            - v1-dep--firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dep--firrtl
 
       - test-component:
           component: "diagrammer"
@@ -300,6 +417,13 @@ jobs:
 
     steps:
       - restore-workspace
+      - restore_cache:
+          keys:
+            - v1-dep--diagrammer--{{ checksum "chisel-release/diagrammer/build.sbt" }}--{{ checksum "chisel-release/diagrammer/project/plugins.sbt" }}
+            - v1-dep--chisel3--{{ checksum "chisel-release/chisel3/build.sbt" }}--{{ checksum "chisel-release/chisel3/project/plugins.sbt" }}
+            - v1-dep--firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dep--firrtl
 
       - test-component:
           component: "diagrammer"
@@ -310,22 +434,45 @@ jobs:
 
     steps:
       - restore-workspace
+      - restore_cache:
+          keys:
+            - v1-dep--chisel-testers--{{ checksum "chisel-release/chisel-testers/build.sbt" }}--{{ checksum "chisel-release/chisel-testers/project/plugins.sbt" }}
+            - v1-dep--chisel3--{{ checksum "chisel-release/chisel3/build.sbt" }}--{{ checksum "chisel-release/chisel3/project/plugins.sbt" }}
+            - v1-dep--firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dep--firrtl
 
-      # publish chisel
+      # publish chisel-testers
       - publish-component:
           component: "chisel-testers"
           scalaVersion: "++2.11.12"
+      - save-workspace:
+          package: "chisel-iotesters_2.11"
       - publish-component:
           component: "chisel-testers"
           scalaVersion: "++2.12.10"
-
-      - save-workspace
+      - save-workspace:
+          package: "chisel-iotesters_2.12"
+      - save_cache:
+          paths:
+            - ~/.coursier
+            - ~/.ivy2
+            - ~/.m2
+            - ~/.sbt
+          key: v1-dep--chisel-testers--{{ checksum "chisel-release/chisel-testers/build.sbt" }}--{{ checksum "chisel-release/chisel-testers/project/plugins.sbt" }}
 
   test-chisel-testers-2_11:
     executor: chisel-executor
 
     steps:
       - restore-workspace
+      - restore_cache:
+          keys:
+            - v1-dep--chisel-testers--{{ checksum "chisel-release/chisel-testers/build.sbt" }}--{{ checksum "chisel-release/chisel-testers/project/plugins.sbt" }}
+            - v1-dep--chisel3--{{ checksum "chisel-release/chisel3/build.sbt" }}--{{ checksum "chisel-release/chisel3/project/plugins.sbt" }}
+            - v1-dep--firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dep--firrtl
 
       - test-component:
           component: "chisel-testers"
@@ -336,6 +483,13 @@ jobs:
 
     steps:
       - restore-workspace
+      - restore_cache:
+          keys:
+            - v1-dep--chisel-testers--{{ checksum "chisel-release/chisel-testers/build.sbt" }}--{{ checksum "chisel-release/chisel-testers/project/plugins.sbt" }}
+            - v1-dep--chisel3--{{ checksum "chisel-release/chisel3/build.sbt" }}--{{ checksum "chisel-release/chisel3/project/plugins.sbt" }}
+            - v1-dep--firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dep--firrtl
 
       - test-component:
           component: "chisel-testers"
@@ -346,22 +500,45 @@ jobs:
 
     steps:
       - restore-workspace
+      - restore_cache:
+          keys:
+            - v1-dep--chisel-testers2--{{ checksum "chisel-release/chisel-testers2/build.sbt" }}--{{ checksum "chisel-release/chisel-testers2/project/plugins.sbt" }}
+            - v1-dep--chisel3--{{ checksum "chisel-release/chisel3/build.sbt" }}--{{ checksum "chisel-release/chisel3/project/plugins.sbt" }}
+            - v1-dep--firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dep--firrtl
 
-      # publish chisel
+      # publish chisel-testers2
       - publish-component:
           component: "chisel-testers2"
           scalaVersion: "++2.11.12"
+      - save-workspace:
+          package: "chisel-testers2_2.11"
       - publish-component:
           component: "chisel-testers2"
           scalaVersion: "++2.12.10"
-
-      - save-workspace
+      - save-workspace:
+          package: "chisel-testers2_2.12"
+      - save_cache:
+          paths:
+            - ~/.coursier
+            - ~/.ivy2
+            - ~/.m2
+            - ~/.sbt
+          key: v1-dep--chisel-testers2--{{ checksum "chisel-release/chisel-testers2/build.sbt" }}--{{ checksum "chisel-release/chisel-testers2/project/plugins.sbt" }}
 
   test-chisel-testers2-2_11:
     executor: chisel-executor
 
     steps:
       - restore-workspace
+      - restore_cache:
+          keys:
+            - v1-dep--chisel-testers2--{{ checksum "chisel-release/chisel-testers2/build.sbt" }}--{{ checksum "chisel-release/chisel-testers2/project/plugins.sbt" }}
+            - v1-dep--chisel3--{{ checksum "chisel-release/chisel3/build.sbt" }}--{{ checksum "chisel-release/chisel3/project/plugins.sbt" }}
+            - v1-dep--firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dep--firrtl
 
       - test-component:
           component: "chisel-testers2"
@@ -372,6 +549,13 @@ jobs:
 
     steps:
       - restore-workspace
+      - restore_cache:
+          keys:
+            - v1-dep--chisel-testers2--{{ checksum "chisel-release/chisel-testers2/build.sbt" }}--{{ checksum "chisel-release/chisel-testers2/project/plugins.sbt" }}
+            - v1-dep--chisel3--{{ checksum "chisel-release/chisel3/build.sbt" }}--{{ checksum "chisel-release/chisel3/project/plugins.sbt" }}
+            - v1-dep--firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dep--firrtl
 
       - test-component:
           component: "chisel-testers2"
@@ -382,22 +566,49 @@ jobs:
 
     steps:
       - restore-workspace
+      - restore_cache:
+          keys:
+            - v1-dep--dsptools--{{ checksum "chisel-release/dsptools/build.sbt" }}--{{ checksum "chisel-release/dsptools2/project/plugins.sbt" }}
+            - v1-dep--chisel-testers2--{{ checksum "chisel-release/chisel-testers2/build.sbt" }}--{{ checksum "chisel-release/chisel-testers2/project/plugins.sbt" }}
+            - v1-dep--chisel-testers--{{ checksum "chisel-release/chisel-testers/build.sbt" }}--{{ checksum "chisel-release/chisel-testers/project/plugins.sbt" }}
+            - v1-dep--chisel3--{{ checksum "chisel-release/chisel3/build.sbt" }}--{{ checksum "chisel-release/chisel3/project/plugins.sbt" }}
+            - v1-dep--firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dep--firrtl
 
-      # publish chisel
+      # publish dsptools
       - publish-component:
           component: "dsptools"
           scalaVersion: "++2.11.12"
+      - save-workspace:
+          package: "dsptools_2.11"
       - publish-component:
           component: "dsptools"
           scalaVersion: "++2.12.10"
-
-      - save-workspace
+      - save-workspace:
+          package: "dsptools_2.12"
+      - save_cache:
+          paths:
+            - ~/.coursier
+            - ~/.ivy2
+            - ~/.m2
+            - ~/.sbt
+          key: v1-dep--dsptools--{{ checksum "chisel-release/dsptools/build.sbt" }}--{{ checksum "chisel-release/dsptools/project/plugins.sbt" }}
 
   test-dsptools-2_11:
     executor: chisel-executor
 
     steps:
       - restore-workspace
+      - restore_cache:
+          keys:
+            - v1-dep--dsptools--{{ checksum "chisel-release/dsptools/build.sbt" }}--{{ checksum "chisel-release/dsptools2/project/plugins.sbt" }}
+            - v1-dep--chisel-testers2--{{ checksum "chisel-release/chisel-testers2/build.sbt" }}--{{ checksum "chisel-release/chisel-testers2/project/plugins.sbt" }}
+            - v1-dep--chisel-testers--{{ checksum "chisel-release/chisel-testers/build.sbt" }}--{{ checksum "chisel-release/chisel-testers/project/plugins.sbt" }}
+            - v1-dep--chisel3--{{ checksum "chisel-release/chisel3/build.sbt" }}--{{ checksum "chisel-release/chisel3/project/plugins.sbt" }}
+            - v1-dep--firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dep--firrtl
 
       - test-component:
           component: "dsptools"
@@ -408,6 +619,15 @@ jobs:
 
     steps:
       - restore-workspace
+      - restore_cache:
+          keys:
+            - v1-dep--dsptools--{{ checksum "chisel-release/dsptools/build.sbt" }}--{{ checksum "chisel-release/dsptools2/project/plugins.sbt" }}
+            - v1-dep--chisel-testers2--{{ checksum "chisel-release/chisel-testers2/build.sbt" }}--{{ checksum "chisel-release/chisel-testers2/project/plugins.sbt" }}
+            - v1-dep--chisel-testers--{{ checksum "chisel-release/chisel-testers/build.sbt" }}--{{ checksum "chisel-release/chisel-testers/project/plugins.sbt" }}
+            - v1-dep--chisel3--{{ checksum "chisel-release/chisel3/build.sbt" }}--{{ checksum "chisel-release/chisel3/project/plugins.sbt" }}
+            - v1-dep--firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dep--firrtl
 
       - test-component:
           component: "dsptools"
@@ -418,17 +638,39 @@ jobs:
 
     steps:
       - restore-workspace
+      - restore_cache:
+          keys:
+            - v1-dep--rocketchip--{{ checksum "chisel-release/rocketchip/build.sbt" }}--{{ checksum "chisel-release/rocketchip/project/plugins.sbt" }}
+            - v1-dep--dsptools--{{ checksum "chisel-release/dsptools/build.sbt" }}--{{ checksum "chisel-release/dsptools2/project/plugins.sbt" }}
+            - v1-dep--chisel-testers2--{{ checksum "chisel-release/chisel-testers2/build.sbt" }}--{{ checksum "chisel-release/chisel-testers2/project/plugins.sbt" }}
+            - v1-dep--chisel-testers--{{ checksum "chisel-release/chisel-testers/build.sbt" }}--{{ checksum "chisel-release/chisel-testers/project/plugins.sbt" }}
+            - v1-dep--chisel3--{{ checksum "chisel-release/chisel3/build.sbt" }}--{{ checksum "chisel-release/chisel3/project/plugins.sbt" }}
+            - v1-dep--firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dep--firrtl
 
       - publish-component:
           component: "dsptools"
           scalaVersion: "++2.12.10"
           sbtFlags: "'project rocket-dsptools'"
+      - save-workspace:
+          package: "rocket-dsptools_2.12"
 
   test-rocket-dsptools-2_12:
     executor: chisel-executor
 
     steps:
       - restore-workspace
+      - restore_cache:
+          keys:
+            - v1-dep--rocketchip--{{ checksum "chisel-release/rocketchip/build.sbt" }}--{{ checksum "chisel-release/rocketchip/project/plugins.sbt" }}
+            - v1-dep--dsptools--{{ checksum "chisel-release/dsptools/build.sbt" }}--{{ checksum "chisel-release/dsptools2/project/plugins.sbt" }}
+            - v1-dep--chisel-testers2--{{ checksum "chisel-release/chisel-testers2/build.sbt" }}--{{ checksum "chisel-release/chisel-testers2/project/plugins.sbt" }}
+            - v1-dep--chisel-testers--{{ checksum "chisel-release/chisel-testers/build.sbt" }}--{{ checksum "chisel-release/chisel-testers/project/plugins.sbt" }}
+            - v1-dep--chisel3--{{ checksum "chisel-release/chisel3/build.sbt" }}--{{ checksum "chisel-release/chisel3/project/plugins.sbt" }}
+            - v1-dep--firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dep--firrtl
 
       - test-component:
           component: "dsptools"
@@ -440,22 +682,48 @@ jobs:
 
     steps:
       - restore-workspace
+      - restore_cache:
+          keys:
+            - v1-dep--rocket-chip--{{ checksum "chisel-release/rocket-chip/build.sbt" }}--{{ checksum "chisel-release/rocket-chip/project/plugins.sbt" }}
+            - v1-dep--dsptools--{{ checksum "chisel-release/dsptools/build.sbt" }}--{{ checksum "chisel-release/dsptools2/project/plugins.sbt" }}
+            - v1-dep--chisel-testers2--{{ checksum "chisel-release/chisel-testers2/build.sbt" }}--{{ checksum "chisel-release/chisel-testers2/project/plugins.sbt" }}
+            - v1-dep--chisel-testers--{{ checksum "chisel-release/chisel-testers/build.sbt" }}--{{ checksum "chisel-release/chisel-testers/project/plugins.sbt" }}
+            - v1-dep--chisel3--{{ checksum "chisel-release/chisel3/build.sbt" }}--{{ checksum "chisel-release/chisel3/project/plugins.sbt" }}
+            - v1-dep--firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dep--firrtl
 
-      # publish chisel
+      # publish rocket-chip
       - publish-component:
           component: "rocket-chip"
           scalaVersion: "++2.12.10"
           sbtFlags: "-DROCKET_USE_MAVEN"
-
-      - save-workspace
+      - save-workspace:
+          package: "rocketchip_2.12"
+      - save_cache:
+          paths:
+            - ~/.coursier
+            - ~/.ivy2
+            - ~/.m2
+            - ~/.sbt
+          key: v1-dep--rocket-chip--{{ checksum "chisel-release/rocket-chip/build.sbt" }}--{{ checksum "chisel-release/rocket-chip/project/plugins.sbt" }}
 
   test-rocket-chip-2_12:
     executor: chisel-executor
 
     steps:
       - restore-workspace
+      - restore_cache:
+          keys:
+            - v1-dep--rocketchip--{{ checksum "chisel-release/rocketchip/build.sbt" }}--{{ checksum "chisel-release/rocketchip/project/plugins.sbt" }}
+            - v1-dep--dsptools--{{ checksum "chisel-release/dsptools/build.sbt" }}--{{ checksum "chisel-release/dsptools2/project/plugins.sbt" }}
+            - v1-dep--chisel-testers2--{{ checksum "chisel-release/chisel-testers2/build.sbt" }}--{{ checksum "chisel-release/chisel-testers2/project/plugins.sbt" }}
+            - v1-dep--chisel-testers--{{ checksum "chisel-release/chisel-testers/build.sbt" }}--{{ checksum "chisel-release/chisel-testers/project/plugins.sbt" }}
+            - v1-dep--chisel3--{{ checksum "chisel-release/chisel3/build.sbt" }}--{{ checksum "chisel-release/chisel3/project/plugins.sbt" }}
+            - v1-dep--firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dep--firrtl
 
-      # publish chisel
       - test-component:
           component: "rocket-chip"
           scalaVersion: "++2.12.10"
