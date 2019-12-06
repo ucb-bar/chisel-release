@@ -66,6 +66,7 @@ jobs:
             - ~/.m2
             - ~/.sbt
             - ~/.coursier
+            - ~/.ivy2
           key: v1-dependencies-firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
         
       - persist_to_workspace:
