@@ -55,19 +55,20 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v2-dependencies-firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+          - v3-dependencies-firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
           # fallback to using the latest cache if no exact match is found
-          - v2-dependencies-firrtl
+          - v3-dependencies-firrtl
 
       - run: cd chisel-release/firrtl && cat /dev/null | sbt "$SBT_ARGS" "++2.12.10" compile test:compile
       - run: for d in ~/.??*; do if [[ -d $d ]]; then find $d -name "*typesafe*"; fi; done
       - save_cache:
           paths:
-            - ~/.m2
-            - ~/.sbt
+            - ~/.cache
             - ~/.coursier
             - ~/.ivy2
-          key: v2-dependencies-firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+            - ~/.m2
+            - ~/.sbt
+          key: v3-dependencies-firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
         
       - persist_to_workspace:
           root: /home/chisel
@@ -84,9 +85,9 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v2-dependencies-firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+            - v3-dependencies-firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
             # fallback to using the latest cache if no exact match is found
-            - v2-dependencies-firrtl
+            - v3-dependencies-firrtl
 
       - run: for d in ~/.??*; do if [[ -d $d ]]; then find $d -name "*typesafe*"; fi; done
       # run tests!
