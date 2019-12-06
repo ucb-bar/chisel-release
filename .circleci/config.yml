@@ -6,7 +6,7 @@
 version: 2
 
 jobs:
-  build:
+  prep:
     branches:
       only:
         - circleci # list of branches to build
@@ -38,6 +38,36 @@ jobs:
             git submodule sync
             git submodule update --init --recursive
 
+      - persist_to_workspace:
+          root: /home/chisel
+          paths:
+            - repo
+
+  build:
+    branches:
+      only:
+        - circleci # list of branches to build
+    docker:
+      # specify the version you desire here
+      - image: ucbbar/chisel3-tools
+        user: "chisel"
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
+
+    working_directory: ~/repo
+
+    environment:
+      # Customize the JVM maximum heap limit
+      JVM_OPTS: -Xmx3072m
+      TERM: dumb
+      SBT_ARGS: "; set ThisBuild / parallelExecution := false; set ThisBuild / fork := false; set ThisBuild / testForkedParallel := false"
+
+    steps:
+      - attach_workspace:
+          at: /home/chisel
 
       # Download and cache dependencies
       - restore_cache:
@@ -46,7 +76,7 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-firrtl
 
-      - run: cd chisel-release/firrtl && cat /dev/null | sbt "$SBT_ARGS" "++2.12.10" compile test:compile && cat /dev/null | sbt "$SBT_ARGS" -DminimalResources "++2.12.10" test:test
+      - run: cd chisel-release/firrtl && cat /dev/null | sbt "$SBT_ARGS" "++2.12.10" compile test:compile
 
       - save_cache:
           paths:
@@ -55,5 +85,43 @@ jobs:
             - ~/.coursier
           key: v1-dependencies-firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
         
+      - persist_to_workspace:
+          root: /home/chisel
+          paths:
+            - repo/firrtl/target
+
+  test:
+    branches:
+      only:
+        - circleci # list of branches to build
+    docker:
+      # specify the version you desire here
+      - image: ucbbar/chisel3-tools
+        user: "chisel"
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
+
+    working_directory: ~/repo
+
+    environment:
+      # Customize the JVM maximum heap limit
+      JVM_OPTS: -Xmx3072m
+      TERM: dumb
+      SBT_ARGS: "; set ThisBuild / parallelExecution := false; set ThisBuild / fork := false; set ThisBuild / testForkedParallel := false"
+
+    steps:
+      - attach_workspace:
+          at: /home/chisel
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-firrtl
+
       # run tests!
-#      - run: cd chisel-release/firrtl && cat /dev/null | sbt "$SBT_ARGS" -DminimalResources "++2.12.10" test:test
+      - run: cd chisel-release/firrtl && cat /dev/null | sbt "$SBT_ARGS" -DminimalResources "++2.12.10" test:test
