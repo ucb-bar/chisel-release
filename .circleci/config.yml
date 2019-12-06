@@ -46,7 +46,7 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-firrtl
 
-      - run: cd chisel-release/firrtl && cat /dev/null | sbt "$SBT_ARGS" "++2.12.10" compile test:compile
+      - run: cd chisel-release/firrtl && cat /dev/null | sbt "$SBT_ARGS" "++2.12.10" compile test:compile && cat /dev/null | sbt "$SBT_ARGS" -DminimalResources "++2.12.10" test:test
 
       - save_cache:
           paths:
@@ -56,4 +56,4 @@ jobs:
           key: v1-dependencies-firrtl--{{ checksum "chisel-release/firrtl/build.sbt" }}--{{ checksum "chisel-release/firrtl/project/plugins.sbt" }}
         
       # run tests!
-      - run: cd chisel-release/firrtl && cat /dev/null | sbt "$SBT_ARGS" -DminimalResources "++2.12.10" test:test
+#      - run: cd chisel-release/firrtl && cat /dev/null | sbt "$SBT_ARGS" -DminimalResources "++2.12.10" test:test
