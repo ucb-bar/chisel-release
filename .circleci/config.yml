@@ -80,7 +80,7 @@ commands:
       # We currently run them separately so we can run them in parallel.
       - run:
           command: |
-            (cd chisel-release/<< parameters.component >> && cat /dev/null | sbt "$SBT_ARGS" -DminimalResources << parameters.scalaVersion >> test)
+            (cd chisel-release/<< parameters.component >> && cat /dev/null | sbt "$SBT_ARGS" -DminimalResources << parameters.scalaVersion >> test:compile && cat /dev/null | sbt "$SBT_ARGS" -DminimalResources << parameters.scalaVersion >> test:test)
 
   checkstyle-component:
     description: "Verify coding style"
@@ -803,11 +803,11 @@ workflows:
             - build-chisel-testers
             - build-chisel-testers2
             - build-rocket-chip
-#      - test-firrtl-2_11:
-#          requires:
-#            - build-firrtl
-#      - test-firrtl-2_12:
-#          requires:
+      - test-firrtl-2_11:
+          requires:
+            - build-firrtl
+      - test-firrtl-2_12:
+          requires:
 #            - build-firrtl
       - test-firrtl-interpreter-2_11:
           requires:
