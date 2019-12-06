@@ -71,7 +71,7 @@ jobs:
       - persist_to_workspace:
           root: /home/chisel
           paths:
-            - repo/firrtl/target
+            - repo/chisel-release/firrtl/target
 
   test-firrtl:
     executor: chisel-executor
