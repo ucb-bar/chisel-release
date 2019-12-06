@@ -60,7 +60,6 @@ jobs:
           - v3-dependencies-firrtl
 
       - run: cd chisel-release/firrtl && cat /dev/null | sbt "$SBT_ARGS" "++2.12.10" compile test:compile
-      - run: for d in ~/.??*; do if [[ -d $d ]]; then find $d -name "*typesafe*"; fi; done
       - save_cache:
           paths:
             - ~/.cache
@@ -89,7 +88,7 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v3-dependencies-firrtl
 
-      - run: for d in ~/.??*; do if [[ -d $d ]]; then find $d -name "*typesafe*"; fi; done
+      - run: cd chisel-release/firrtl && cat /dev/null | sbt "$SBT_ARGS" "++2.12.10" compile test:compile
       # run tests!
       - run: cd chisel-release/firrtl && cat /dev/null | sbt "$SBT_ARGS" -DminimalResources "++2.12.10" test:test
 
