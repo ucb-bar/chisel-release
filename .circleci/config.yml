@@ -808,7 +808,7 @@ workflows:
             - build-firrtl
       - test-firrtl-2_12:
           requires:
-#            - build-firrtl
+            - build-firrtl
       - test-firrtl-interpreter-2_11:
           requires:
             - build-firrtl-interpreter
