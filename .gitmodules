@@ -16,7 +16,7 @@
 	branch = master
 [submodule "dsptools"]
 	path = dsptools
-	url = git@github.com:ucb-bar/dsptools.git
+	url = https://github.com/ucb-bar/dsptools.git
 	branch = master
 [submodule "treadle"]
 	path = treadle
