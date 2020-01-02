@@ -1,10 +1,10 @@
-name: CI
+name: basic docker verification
 
 on: [push]
 
 jobs:
   build:
-
+    runs-on: ubuntu-latest
     container:
       image: ucbbar/chisel3-tools
       options: --user root --entrypoint /bin/bash
