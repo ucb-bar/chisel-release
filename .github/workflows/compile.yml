@@ -2,7 +2,7 @@ name: Compile Workflow
 on:
   push:
     branches:
-      - githubAction
+      - githubActions
 
 jobs:
   compile_job:
