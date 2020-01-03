@@ -69,4 +69,5 @@ jobs:
           tar zxf ../archive/workspace.tgz
       - name: test all
         run: |
+          sed -E -i.bak '/^enablePlugins\(SiteScaladocPlugin\)$/d' firrtl/build.sbt
           make NEED_PUBLISHING="" EXPLICIT_SUBMODULES="firrtl" +test
