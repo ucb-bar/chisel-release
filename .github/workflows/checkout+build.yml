@@ -21,7 +21,7 @@ jobs:
           git --version
           add-apt-repository ppa:git-core/ppa
           apt-get update
-          apt-get install git
+          apt-get --assume-yes install git
           git --version
       - uses: actions/checkout@v2
       - name: checkout
