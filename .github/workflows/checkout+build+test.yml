@@ -36,7 +36,6 @@ jobs:
       - name: copy ivy
         run: |
           mkdir ivy2
-#          rsync -a $HOME/.ivy2/local ivy2/
           cp -a $HOME/.ivy2/local ivy2
       - name: archive build
         uses: actions/upload-artifact@v1
@@ -65,7 +64,6 @@ jobs:
       - name: restore ivy
         run: |
           mkdir -p $HOME/.ivy2/local
-#          rsync -a ivy2/ $HOME/.ivy2
           cp -a ivy2/local $HOME/.ivy2
       - name: test all
         run: |
