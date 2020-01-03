@@ -16,6 +16,13 @@ jobs:
           printenv
           whoami
           pwd
+      - name: update git
+        run: |
+          git --version
+          add-apt-repository ppa:git-core/ppa
+          apt-get update
+          apt-get install git
+          git --version
       - uses: actions/checkout@v2
       - name: checkout
         run: |
