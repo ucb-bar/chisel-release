@@ -38,6 +38,7 @@ jobs:
           mkdir ../archive
           tar -Pzcf ../archive/dotdirs.tgz $(find $HOME -maxdepth 1 -type d -name '.??*')
           tar zcf ../archive/workspace.tgz .
+          ls -la $HOME
       - name: archive build
         uses: actions/upload-artifact@v1
         with:
@@ -67,6 +68,7 @@ jobs:
         run: |
           tar -Pzxf ../archive/dotdirs.tgz
           tar zxf ../archive/workspace.tgz
+          ls -la $HOME
       - name: test all
         run: |
           sed -E -i.bak '/^enablePlugins\(SiteScaladocPlugin\)$/d' firrtl/build.sbt
