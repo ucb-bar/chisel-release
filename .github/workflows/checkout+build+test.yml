@@ -37,6 +37,10 @@ jobs:
         run: |
           mkdir ivy2
           cp -a $HOME/.ivy2/local ivy2
+      - name: copy sbt
+        run: |
+          mkdir sbt
+          cp -a $HOME/.sbt/ sbt
       - name: archive build
         uses: actions/upload-artifact@v1
         with:
@@ -62,6 +66,10 @@ jobs:
         with:
           name: chisel-release-build
           path: .
+      - name: restore sbt
+        run: |
+          mkdir -p $HOME/.sbt
+          cp -a sbt/ $HOME/.sbt/
       - name: restore ivy
         run: |
           mkdir -p $HOME/.ivy2/local
