@@ -61,6 +61,7 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: chisel-release-build
+          path: .
       - name: restore ivy
         run: |
           mkdir -p $HOME/.ivy2/local
