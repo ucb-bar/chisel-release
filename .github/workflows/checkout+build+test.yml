@@ -1,0 +1,70 @@
+name: Checkout, Build, and Test
+
+on: [push]
+
+jobs:
+  build:
+    name: checkout and build
+    runs-on: ubuntu-latest
+    container:
+      image: ucbbar/chisel3-tools
+      options: --user root --entrypoint /bin/bash
+
+    steps:
+      - name: id
+        run: |
+          printenv
+          whoami
+          pwd
+      - name: update git
+        run: |
+          git --version
+          add-apt-repository ppa:git-core/ppa
+          apt-get update
+          apt-get --assume-yes install git
+          git --version
+      - uses: actions/checkout@v2
+      - name: checkout
+        run: |
+          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+          git submodule sync --recursive
+          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
+      - name: build
+        run: |
+          make NEED_PUBLISHING="" +publishLocal
+      - name: archive src
+      - uses: actions/upload-artifact@v1
+        with:
+          name: chisel-release-src
+          path: $GITHUB_WORKSPACE
+      - name: archive ivy
+      - uses: actions/upload-artifact@v1
+        with:
+          name: chisel-release-ivy
+          path: $HOME/.ivy2/local
+
+  test:
+    name: test
+    needs: build
+    runs-on: ubuntu-latest
+    container:
+      image: ucbbar/chisel3-tools
+      options: --user root --entrypoint /bin/bash
+
+    steps:
+      - name: id
+        run: |
+          printenv
+          whoami
+          pwd
+      - name: restore src
+        uses: actions/download-artifact@v1
+        with:
+          name: chisel-release-src
+      - name: restore ivy
+        uses: actions/download-artifact@v1
+        with:
+          name: chisel-release-ivy
+      - name: test all
+        run: |
+          make NEED_PUBLISHING="" +test
