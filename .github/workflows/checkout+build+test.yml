@@ -33,19 +33,16 @@ jobs:
         run: |
           make NEED_PUBLISHING="" EXPLICIT_SUBMODULES="firrtl" +publishLocal
 # We can only archive things available on the host, so copy .ivy2/local to the workspace
-      - name: copy ivy
+      - name: tar dot directories and workspace
         run: |
-          mkdir ivy2
-          cp -a $HOME/.ivy2/local ivy2
-      - name: copy sbt
-        run: |
-          mkdir sbt
-          cp -a $HOME/.sbt/ sbt
+          mkdir ../archive
+          tar zcf ../archive/dotdirs.tgz $(find $HOME -maxdepth 1 -type d -name '.??*')
+          tar zcf ../archive/workspace.tgz .
       - name: archive build
         uses: actions/upload-artifact@v1
         with:
           name: chisel-release-build
-          path: .
+          path: ../archive
 
   test:
     name: test
@@ -65,15 +62,11 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: chisel-release-build
-          path: .
-      - name: restore sbt
+          path: ../archive
+      - name: restore dot dirs and workspace
         run: |
-          mkdir -p $HOME/.sbt
-          cp -a sbt/ $HOME/.sbt/
-      - name: restore ivy
-        run: |
-          mkdir -p $HOME/.ivy2/local
-          cp -a ivy2/local $HOME/.ivy2
+          tar zxf ../archive/dotdirs.tgz
+          tar zxf ../archive/workspace.tgz
       - name: test all
         run: |
           make NEED_PUBLISHING="" EXPLICIT_SUBMODULES="firrtl" +test
