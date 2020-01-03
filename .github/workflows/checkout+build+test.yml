@@ -31,17 +31,17 @@ jobs:
           git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
       - name: build
         run: |
-          make NEED_PUBLISHING="" +publishLocal
-      - name: archive src
+          make NEED_PUBLISHING="" EXPLICIT_SUBMODULES="firrtl" +publishLocal
+# We can only archive things available on the host, so copy .ivy2/local to the workspace
+      - name: copy ivy
+        run: |
+          mkdir ivy2
+          rsync -a $HOME/.ivy2/local ivy2/
+      - name: archive build
         uses: actions/upload-artifact@v1
         with:
-          name: chisel-release-src
-          path: $GITHUB_WORKSPACE
-      - name: archive ivy
-        uses: actions/upload-artifact@v1
-        with:
-          name: chisel-release-ivy
-          path: $HOME/.ivy2/local
+          name: chisel-release-build
+          path: .
 
   test:
     name: test
@@ -57,14 +57,14 @@ jobs:
           printenv
           whoami
           pwd
-      - name: restore src
+      - name: restore build
         uses: actions/download-artifact@v1
         with:
-          name: chisel-release-src
+          name: chisel-release-build
       - name: restore ivy
-        uses: actions/download-artifact@v1
-        with:
-          name: chisel-release-ivy
+        run: |
+          mkdir -p $HOME/.ivy2/local
+          rsync -a ivy2/ $HOME/.ivy2
       - name: test all
         run: |
-          make NEED_PUBLISHING="" +test
+          make NEED_PUBLISHING="" EXPLICIT_SUBMODULES="firrtl" +test
