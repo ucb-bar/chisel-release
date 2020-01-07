@@ -3,7 +3,7 @@ versions:
     packageName: chisel-iotesters
     version: 1.4-SNAPSHOT
   chisel-testers2:
-    packageName: chisel-testers2
+    packageName: chiseltest
     version: 0.2-SNAPSHOT
   chisel3:
     packageName: chisel3
