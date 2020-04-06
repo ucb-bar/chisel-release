@@ -47,7 +47,7 @@ require_clean_work_tree:
 	fi
 	@if ! git diff-index --cached --quiet --ignore-submodules=untracked HEAD --; \
 	then \
-	    if [ $err = 0 ]; \
+	    if [ $$err = 0 ]; \
 	    then \
 	        echo >&2 "tree not claen: Your index contains uncommitted changes."; \
 	    else \
@@ -62,7 +62,7 @@ require_clean_work_tree:
 
 pull:	require_clean_work_tree
 	git pull
-	git submodule foreach 'git checkout $(git config -f $toplevel/.gitmodules submodule.$name.branch) && git pull && git submodule update --init --recursive'
+	git submodule foreach 'git checkout $$(git config -f $$toplevel/.gitmodules submodule.$$name.branch) && git pull && git submodule update --init --recursive'
 
 clean_artifacts:
 	rm -rf $(IVY_DIR)/local/edu.berkeley.cs
