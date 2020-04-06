@@ -60,8 +60,8 @@ require_clean_work_tree:
 #	git status --ignore-submodules=untracked
 #	git diff --quiet --ignore-submodules=untracked
 
-pull:	#require_clean_work_tree
-	#git pull
+pull:	require_clean_work_tree
+	git pull
 	git submodule foreach 'git checkout $(git config -f $toplevel/.gitmodules submodule.$name.branch) && git pull && git submodule update --init --recursive'
 
 clean_artifacts:
@@ -82,4 +82,4 @@ test-build:
 .DEFAULT:
 	$(call doSBT,$@)
 
-.PHONY: clean +clean compile coverage default publishLocal publishLocalSigned pull
+.PHONY: build clean +clean  clean_caches clean_artifacts compile coverage default publishLocal publishLocalSigned pull require_clean_work_tree test-build
