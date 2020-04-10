@@ -70,7 +70,9 @@ clean_artifacts:
 clean_caches:
 	rm -rf $(IVY_DIR)/cache/edu.berkeley.cs
 	for cache in $(COURSIER_CACHES); do \
-	  find $$cache -type d -path '*/edu/berkeley/cs' -exec rm -rf {} + ;\
+	  if [[ -d $$cache ]]; then \
+	    find $$cache -type d -path '*/edu/berkeley/cs' -exec rm -rf {} + ;\
+	  fi; \
 	done
 
 build:
