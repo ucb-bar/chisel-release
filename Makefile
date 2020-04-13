@@ -78,10 +78,10 @@ clean_caches:
 build:
 	$(MAKE) NEED_PUBLISHING="" +clean +publishLocal
 
-test-build:
+test_build:
 	$(MAKE) NEED_PUBLISHING="" +test
 
 .DEFAULT:
 	$(call doSBT,$@)
 
-.PHONY: build clean +clean  clean_caches clean_artifacts compile coverage default publishLocal publishLocalSigned pull require_clean_work_tree test-build
+.PHONY: build clean +clean  clean_caches clean_artifacts compile coverage default publishLocal publishLocalSigned pull require_clean_work_tree test_build
