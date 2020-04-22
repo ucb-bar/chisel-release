@@ -36,7 +36,7 @@ $(eval publishlocal=$(if $(filter $(NEED_PUBLISHING),$(1)),$(if $(findstring +,$
 	$(if $(and $(filter $(EXPLICIT_SUBMODULES),dsptools),$(filter $(EXPLICIT_SUBMODULES),rocket-chip)),echo rocket-dsptools && cd dsptools && $(SBT) "project rocket-dsptools" "$(1)" || exit 1)
 endef
 
-+clean +publishLocal +test +publishLocalSigned:
++clean +publishLocal +test +publishLocalSigned +publishSigned:
 	date > stamps/$@.begin
 	$(call doSBT,$@)
 	date > stamps/$@.end
