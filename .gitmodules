@@ -34,3 +34,11 @@
 	path = chisel-testers2
 	url = https://github.com/ucb-bar/chisel-testers2.git
 	branch = master
+[submodule "chisel-template"]
+	path = chisel-template
+	url = https://github.com/freechipsproject/chisel-template.git
+	branch = master
+[submodule "chisel-tutorial"]
+	path = chisel-tutorial
+	url = https://github.com/ucb-bar/chisel-tutorial.git
+	branch = master
