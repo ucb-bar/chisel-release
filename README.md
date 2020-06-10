@@ -11,7 +11,7 @@ While in principle, this could be accomplished with the "correct" top-level buil
 
 Some submodule tests presume they're running from the root of the submodule directory and can directly access files in src/test/resources.
 This is not true when running as a dependent project under a higher root (the current working directory is the top of the project tree).
-Additionaly, sbt's treatment of sub-projects is schizophrenic at best: dependencies and plugins from sub-projects have to be propogated up to the top-level project.
+Additionaly, sbt's treatment of sub-projects is schizophrenic at best: at the time of writing (sbt 1.3.10), dependencies and plugins from sub-projects have to be propogated up to the top-level project.
 Switching a project from a library dependency to a sub-project dependency is not straight-forward.
 
 While we assume this will all eventually get worked out (either via updates to sbt, or a transition to mill or some other build tool), we use a relatively simple Makefile for the moment.
@@ -34,7 +34,7 @@ $ git submodule update --init --recursive
 $ make +clean +publishLocal
 ```
 
-Please see [2] and [3] for details on publishing SNAPSHOT and release versions on Sonatype/Maven.
+Please see [2] for details on publishing SNAPSHOT and release versions on Sonatype/Maven.
 
 In order to understand the semantics of Chisel versions, we need to say something about Chisel development.
 
@@ -42,7 +42,7 @@ In order to understand the semantics of Chisel versions, we need to say somethin
 We follow a practice similar to [1].
 Due to Chisel's research evolution and resources, we tend to be oriented more toward development than production.
 This may change with the increasing adoption of Chisel and the requirement to maintain a stable set of tools that can be used in production environments.
-This document describes the current (2019) development environment.
+This document describes the current (2020) development environment.
 
 Our `master` branch corresponds to the `develop` branch in [1].
 Most developer work is focused here.
@@ -56,7 +56,7 @@ Changes that impact the existing API are typically tagged for the next major rel
 We use semantic versioning for releases.
 A release is defined as a tuple `z.y.x` where `z.y` correspond to the **major** release number, and `x` is the **minor** release number.
 Minor releases (increasing `x`) are API-preserving.
-They typically consist of bug fixes or experimental features that should not impact existing code.
+They typically consist of bug fixes or experimental features that should not negatively impact existing code.
 A new major release indicates some change to the API.
 It may impact existing code.
 
@@ -64,10 +64,17 @@ Unlike the practice described in [1], we currently have multiple release branche
 We could use the _single release branch_ model, creating specific release branches as required.
 This would simplify the _normal_ release process, at the expense of complicating the process should a requirement arise for an emergency fix to a prior release.
 
-Current practice is to create a new branch `z.y+1.x` from either `z.y.x` or `master` as part of the preparation for a new major release.
+Current practice is to create new branches `z.y+1.x` from either `z.y.x` or `master`, and branch `z.y-release` from `z.y+1.x` as part of the preparation for a new major release.
 **NOTE**: The `x` here is the character **x**.
-The `3.1.x` branch will contain all releases from `3.1.0` to `3.1.999999`
-Minor releases (bug fixes or experimental features) are created from commits cherry-picked from master into this branch, the internal version bumped, and the branch tagged with the internal version.
+The `3.1.x` and `3.1-release` branches will contain commits for all releases from `3.1.0` to `3.1.999999`.
+Minor releases (bug fixes or experimental features) are created from commits cherry-picked (or backported using the mergify bot) from master into the `z.y.x` branch, and from there to the `z.y-release` branch as part of the release process.
+To faciltate testing, the internal version of the `z.y.x` branch will always be `z.y-SNAPSHOT`.
+
+To successfully publish releases of related repositories, it is crucial that the collection of repositories can be treated as a single repository.
+We don't want someone to commit a change to one of the repositories during the testing of the ensemble.
+To this end, we use the branches parallel to `z.y.x`, namely `z.y-release`, and releases are cut from these `z.y-release` branches.
+By convention, only the release process itself makes commits to the `z.y-release` branches.
+The internal version of `z.y-release` branch is bumped with each release, from pre-release time-stamped SNAPSHOTS (`3.3-20200227-SNAPSHOT`), to release candidates (`3.3.0-RC1`), to major (`3.3.0`) and minor (`3.3.1`) releases, and branch tags created that correspond to these internal versions.
 
 ## Branches vs. tags
 There is the potential for confusion here.
@@ -88,17 +95,27 @@ but I think it's better to avoid the confusion altogether by ensuring that _tag_
 In general, _tags_ are fixed and correspond to a specific commit.
 _Branches_ represent a sequence of commits and will evolve over time.
 Where there is the possibility of confusion, we prefix a tag corresponding to a release with the character `v`. \
-I.e., the _tag_ `v3.1.6` corresponds to the release `3.1.6` and it will tag a commit on the _branch_ `3.1.x`.
-The _branch_ `3.1.x` contains the history of commits for the `3.1` series of releases (major version 3.1).
+I.e., the _tag_ `v3.1.6` corresponds to the release `3.1.6` and it will tag a commit on the _branch_ `3.1-release`.
+The _branch_ `3.1-release` contains the history of commits for the `3.1` series of releases (major version 3.1).
 The _tag_ `v3.1.6` represents the state of the `3.1` major version at the time of the 3.1.6 release.
+In principle, the `z.y-release` branch corresponds identically to the `z.y.x` branch, with the exception of the internal version - increasing with each release in the former; locked to `z.y-SNAPSHOT` in the latter.
+In practice, there may be minor changes to the meta-data associated with the `z.y-release` branch in order to satisfy external publishing constraints, but over time, these changes should be incorporated in the `z.y.x` and `master` branches.
 
 When preparing the next 3.1 minor release (say, `3.1.8`), you would:
-- checkout the `3.1.x` branch,
-- bump the internal version number in `build.sbt` to `3.1.8`,
-- add/cherry-pick your changes,
+- checkout the `3.1.x` branch and `git pull` to enure it's up to date,
+- checkout the `3.1-release` branch  and `git pull` to enure it's up to date,
+- bump the internal version numbers in the submodule `build.sbt`s on the branches corresponding to the `3.1-release`,
 - commit your changes,
-- tag this commit with a `v3.1.8`
-- push your updated `3.1.x` branch and the `v3.1.8` tag upstream
+- merge the `3.1.x` branch into the `3.1-release` branch and the submodule `z.y.x` branches into the `z.y-release` branches,
+- commit your changes,
+- clean, build, and test the submodules,
+- publish the submodules on Sonatype/Nexus,
+- tag each submodule's branch appropriately,
+- tag the chisel-release repository,
+- push each submodule branch and tag upstream,
+- push your updated `3.1-release` branch and the `v3.1.8` tag upstream
+
+There are `make` targets and some `bash` shell stanzas to help with this process.
 
 ## Reproducible builds and versioning
 We've opted to make stable builds reproducible (as far as we can).
@@ -112,6 +129,4 @@ The exception to this are the example repositories (chisel-template and chisel-t
 
 [1] https://nvie.com/posts/a-successful-git-branching-model/
 
-[2] https://github.com/ucb-bar/chisel-release/blob/master/doc/publish-SNAPSHOT.md
-
-[3] https://github.com/ucb-bar/chisel-release/blob/master/doc/publish-release.md
+[2] https://github.com/ucb-bar/chisel-release/blob/master/doc/publish-release.md
