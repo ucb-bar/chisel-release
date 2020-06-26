@@ -21,8 +21,9 @@ default: install
 
 # For the first approach, we need to execute sbt commands in a specific
 # directory order and possibly do a publishLocal at the end so the results
-# are available to later submodules.
-EXPLICIT_SUBMODULES=firrtl firrtl-interpreter treadle chisel3 chisel-testers2 chisel-testers diagrammer dsptools rocket-chip
+# are available to later submodules. rocket-chip is no longer published along with these repos
+# 
+EXPLICIT_SUBMODULES=firrtl firrtl-interpreter treadle chisel3 chisel-testers2 chisel-testers diagrammer dsptools
 
 # The following targets need a publishLocal so their results are available.
 NEED_PUBLISHING = compile test +compile +test
@@ -36,7 +37,7 @@ $(eval publishlocal=$(if $(filter $(NEED_PUBLISHING),$(1)),$(if $(findstring +,$
 	$(if $(and $(filter $(EXPLICIT_SUBMODULES),dsptools),$(filter $(EXPLICIT_SUBMODULES),rocket-chip)),echo rocket-dsptools && cd dsptools && $(SBT) "project rocket-dsptools" "$(1)" || exit 1)
 endef
 
-+clean +publishLocal +test +publishLocalSigned:
++clean +publishLocal +test +publishLocalSigned +publishSigned:
 	date > stamps/$@.begin
 	$(call doSBT,$@)
 	date > stamps/$@.end
