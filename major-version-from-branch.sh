@@ -7,5 +7,4 @@ toplevel=${2:-".."}
 # Extract the branch name from .gitmodules
 branch=$(git config -f $toplevel/.gitmodules submodule.$name.branch)
 # Keep the leading (major) component of the branch.
-[[ "$branch" =~ ([[:digit:]]+\.[[:digit:]]+)[-\.] ]] && echo "${BASH_REMATCH[1]}"
-
+[[ "$branch" =~ ([[:digit:]]+\.[[:digit:]]+)[-.] ]] && echo "${BASH_REMATCH[1]}"
