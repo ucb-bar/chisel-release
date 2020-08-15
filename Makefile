@@ -1,5 +1,5 @@
 IVY_DIR ?= $(HOME)/.ivy2
-COURSIER_CACHES ?= $(HOME)/.cache $(HOME)/.coursier
+COURSIER_CACHES ?= $(HOME)/.cache $(HOME)/.coursier $(HOME)/Library/Caches/Coursier
 SBT=sbt -Dsbt.ivy.home=$(IVY_DIR) -DROCKET_USE_MAVEN
 PYTHON ?= python3
 MKDIR ?= mkdir
