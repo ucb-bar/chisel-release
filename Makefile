@@ -160,7 +160,7 @@ stamps:
 VERSION_DEP=$(if $(shell test -f $(VERSIONING) && echo yes),$(VERSIONING))
 
 ifneq "$(VERSION_DEP)" ""
-deps.bare:	Makefile $(BUILD_SBTs) $(VERSION_DEP) stamps
+deps.bare:	Makefile $(BUILD_SBTs) $(VERSION_DEP)
 	date > stamps/$@.begin
 	$(PYTHON) $(VERSIONING) -o $@ dependency-array
 	date > stamps/$@.end
