@@ -1,5 +1,5 @@
 IVY_DIR ?= $(HOME)/.ivy2
-COURSIER_CACHES ?= $(HOME)/.cache $(HOME)/.coursier
+COURSIER_CACHES ?= $(HOME)/.cache $(HOME)/.coursier $(HOME)/Library/Caches/Coursier
 SBT=sbt -Dsbt.ivy.home=$(IVY_DIR) -DROCKET_USE_MAVEN
 PYTHON ?= python3
 MKDIR ?= mkdir
@@ -160,7 +160,7 @@ stamps:
 VERSION_DEP=$(if $(shell test -f $(VERSIONING) && echo yes),$(VERSIONING))
 
 ifneq "$(VERSION_DEP)" ""
-deps.bare:	Makefile $(BUILD_SBTs) $(VERSION_DEP) stamps
+deps.bare:	Makefile $(BUILD_SBTs) $(VERSION_DEP)
 	date > stamps/$@.begin
 	$(PYTHON) $(VERSIONING) -o $@ dependency-array
 	date > stamps/$@.end
