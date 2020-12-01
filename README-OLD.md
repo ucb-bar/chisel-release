@@ -1,22 +1,14 @@
-# The chisel-release Repository
+# THIS IS THE ORIGINAL README
+It has been supplanted by the default [README.md](README.md)
 
-## Overview
-Chisel release is a template for core chisel repos.
-This repository is used in conjunction with [chisel-repo-tools](https://github.com/ucb-bar/chisel-repo-tools.git).
-This repo contains the submodules and a couple of files that describe the current branches.
-`chisel-repo-tools` contains the shell, python, and mills scripts used in publishing releases as well as building and
-testing them.
-In general release processes will be run by chisel-repo-tools.
-Most of the documentation on how to do that is in 
-[chisel-repo-tools/docs/index.md](https://github.com/ucb-bar/chisel-repo-tools/blob/dev/docs/index.md)
-
-## Use
-This repository contains the main Chisel repositories as git submodules
-This is the data, if you will, for chisel-repo-tools programs/scripts.
-Typically one will checkout this repo for a specific release operation,
-e.g. updating snapshot published releases, creating new major an minor releases, etc.
+# Chisel Release 
+## Chisel release tooling
+This repository contains the main Chisel repositories as git submodules, and some simple tools to manage release generation, testing, and publishing.
 
 We try to guarantee that all submodule versions (SNAPSHOT and release) are in sync.
+
+There is a top level Makefile that is used to reflect submodule dependencies and invoke sbt to correctly clean, compile, test, and publish individual sub-modules.
+
 While in principle, this could be accomplished with the "correct" top-level build.sbt, it turns out to be difficult in practice.
 
 Some submodule tests presume they're running from the root of the submodule directory and can directly access files in src/test/resources.
@@ -26,32 +18,27 @@ Switching a project from a library dependency to a sub-project dependency is not
 
 While we assume this will all eventually get worked out (either via updates to sbt, or a transition to mill or some other build tool), we use a relatively simple Makefile for the moment.
 
-## Branches
-There are always several active branches in this repo that are updated by chisel-repo-tools.
-The branch names and what they point to is: 
->Z.Y below refers to a specific major release number 
+### Publish Local Versions
+Use the following recipes to generate compatible versions of the chisel libraries.
 
-| branch(es) | use | published as |
-| --- | --- | --- |
-| master | latest development branches | next release (bleeding edge) snapshot |
-| Z.Y.x | latest code for release Z.Y | current release snapshots |
-| Z.Y-release | the released version | Z.Y.x |
+- clone this repository
+```bash
+$ git clone https://github.com/ucb-bar/chisel-release.git
+```
+- checkout the required version (master, or SNAPSHOT or release tag)
+```bash
+$ git checkout master
+$ git pull
+$ git submodule update --init --recursive
+```
+- clean and publish all cross versions
+```bash
+$ make +clean +publishLocal
+```
 
-## Currently the repositories referenced here are.
-### Chisel libraries
-- chisel3
-- chiseltest
-- chisel-testers2
-- diagrammer
-- dsptools
-- firrtl
-- firrtl-interpreter
-- treadle
+Please see [2] for details on publishing SNAPSHOT and release versions on Sonatype/Maven.
 
-### Teaching and
-- chisel-bootcamp
-- chisel-template
-- chisel-tutorial
+In order to understand the semantics of Chisel versions, we need to say something about Chisel development.
 
 ## Chisel development
 We follow a practice similar to [1].
@@ -68,7 +55,7 @@ The goal is to assure that the master branch is always buildable, and moreover, 
 Pull requests are labeled indicating among other things, their impact on the existing API, and tagged with `milestones` indicating their intended release version.
 Changes that impact the existing API are typically tagged for the next major release.
 
-We use modified semantic versioning for releases.
+We use semantic versioning for releases.
 A release is defined as a tuple `z.y.x` where `z.y` correspond to the **major** release number, and `x` is the **minor** release number.
 Minor releases (increasing `x`) are API-preserving.
 They typically consist of bug fixes or experimental features that should not negatively impact existing code.
@@ -145,3 +132,4 @@ The exception to this are the example repositories (chisel-template and chisel-t
 [1] https://nvie.com/posts/a-successful-git-branching-model/
 
 [2] https://github.com/ucb-bar/chisel-release/blob/master/doc/publish-release.md
+
