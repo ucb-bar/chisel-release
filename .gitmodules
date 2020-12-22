@@ -26,10 +26,6 @@
 	path = diagrammer
 	url = https://github.com/freechipsproject/diagrammer
 	branch = 1.1.x
-[submodule "rocket-chip"]
-	path = rocket-chip
-	url = https://github.com/chipsalliance/rocket-chip.git
-	branch = 1.2.x
 [submodule "chisel-testers2"]
 	path = chisel-testers2
 	url = https://github.com/ucb-bar/chisel-testers2.git
