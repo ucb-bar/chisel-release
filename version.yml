@@ -20,18 +20,6 @@ versions:
   firrtl-interpreter:
     packageName: firrtl-interpreter
     version: 1.2.8
-  rocket-chip:
-    packageName: rocketchip
-    version: 1.2.7
-  rocket-chip/chisel3:
-    packageName: chisel3
-    version: 3.2.7
-  rocket-chip/firrtl:
-    packageName: firrtl
-    version: 1.2.7
-  rocket-chip/hardfloat:
-    packageName: hardfloat
-    version: 1.2.7
   treadle:
     packageName: treadle
     version: 1.1.8
