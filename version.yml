@@ -1,31 +1,31 @@
 versions:
   chisel-template:
     packageName: chisel-module-template
-    version: 3.3-SNAPSHOT
+    version: 3.3.3-RC1
   chisel-testers:
     packageName: chisel-iotesters
-    version: 1.5-SNAPSHOT
+    version: 2.5.0-RC1
   chisel-testers2:
     packageName: chiseltest
-    version: 0.3-SNAPSHOT
+    version: 0.5.0-RC1
   chisel-tutorial:
     packageName: chisel-tutorial
-    version: 3.3-SNAPSHOT
+    version: 3.3.3-RC1
   chisel3:
     packageName: chisel3
-    version: 3.4-SNAPSHOT
+    version: 3.5.0-RC1
   diagrammer:
     packageName: firrtl-diagrammer
-    version: 1.3-SNAPSHOT
+    version: 1.5.0-RC1
   dsptools:
     packageName: dsptools
-    version: 1.4-SNAPSHOT
+    version: 1.5.0-RC1
   firrtl:
     packageName: firrtl
-    version: 1.4-SNAPSHOT
+    version: 1.5.0-RC1
   firrtl-interpreter:
     packageName: firrtl-interpreter
-    version: 1.4-SNAPSHOT
+    version: 1.5.0-RC1
   treadle:
     packageName: treadle
-    version: 1.3-SNAPSHOT
+    version: 1.5.0-RC1
