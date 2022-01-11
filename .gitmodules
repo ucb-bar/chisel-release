@@ -26,10 +26,6 @@
 	path = diagrammer
 	url = https://github.com/freechipsproject/diagrammer
 	branch = master
-[submodule "chisel-testers2"]
-	path = chisel-testers2
-	url = https://github.com/ucb-bar/chisel-testers2.git
-	branch = master
 [submodule "chisel-template"]
 	path = chisel-template
 	url = https://github.com/freechipsproject/chisel-template.git
@@ -37,4 +33,8 @@
 [submodule "chisel-tutorial"]
 	path = chisel-tutorial
 	url = https://github.com/ucb-bar/chisel-tutorial.git
+	branch = master
+[submodule "chiseltest"]
+	path = chiseltest
+	url = git@github.com:ucb-bar/chiseltest.git
 	branch = master
