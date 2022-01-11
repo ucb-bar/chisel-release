@@ -1,16 +1,10 @@
 versions:
-  chisel-template:
-    packageName: chisel-module-template
-    version: 3.3-SNAPSHOT
   chisel-testers:
     packageName: chisel-iotesters
     version: 1.5-SNAPSHOT
   chiseltest:
     packageName: chiseltest
     version: 0.3-SNAPSHOT
-  chisel-tutorial:
-    packageName: chisel-tutorial
-    version: 3.3-SNAPSHOT
   chisel3:
     packageName: chisel3
     version: 3.4-SNAPSHOT
