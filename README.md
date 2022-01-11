@@ -41,7 +41,7 @@ The branch names and what they point to is:
 ### Chisel libraries
 - chisel3
 - chiseltest
-- chisel-testers2
+- chiseltest
 - diagrammer
 - dsptools
 - firrtl

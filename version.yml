@@ -1,16 +1,10 @@
 versions:
-  chisel-template:
-    packageName: chisel-module-template
-    version: 3.3.3-RC2
   chisel-testers:
     packageName: chisel-iotesters
     version: 2.5.0-RC2
-  chisel-testers2:
+  chiseltest:
     packageName: chiseltest
     version: 0.5.0-RC2
-  chisel-tutorial:
-    packageName: chisel-tutorial
-    version: 3.3.3-RC2
   chisel3:
     packageName: chisel3
     version: 3.5.0-RC2
