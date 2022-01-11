@@ -1,7 +1,5 @@
-chisel-template "firrtl firrtl-interpreter treadle chisel3 chisel-testers chiseltest"
 chisel-testers "firrtl firrtl-interpreter treadle chisel3"
 chiseltest "firrtl treadle chisel3"
-chisel-tutorial "firrtl firrtl-interpreter treadle chisel3 chisel-testers"
 chisel3 "firrtl treadle"
 diagrammer "firrtl treadle chisel3"
 dsptools "firrtl firrtl-interpreter treadle chisel3 chisel-testers"
