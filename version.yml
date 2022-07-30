@@ -1,25 +1,25 @@
 versions:
   chisel-testers:
     packageName: chisel-iotesters
-    version: 2.5.3
+    version: 2.5.4
   chisel3:
     packageName: chisel3
-    version: 3.5.3
+    version: 3.5.4
   chiseltest:
     packageName: chiseltest
-    version: 0.5.3
+    version: 0.5.4
   diagrammer:
     packageName: firrtl-diagrammer
-    version: 1.5.3
+    version: 1.5.4
   dsptools:
     packageName: dsptools
-    version: 1.5.3
+    version: 1.5.4
   firrtl:
     packageName: firrtl
-    version: 1.5.3
+    version: 1.5.4
   firrtl-interpreter:
     packageName: firrtl-interpreter
-    version: 1.5.3
+    version: 1.5.4
   treadle:
     packageName: treadle
-    version: 1.5.3
+    version: 1.5.4
