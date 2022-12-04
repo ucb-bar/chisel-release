@@ -8,9 +8,6 @@ versions:
   diagrammer:
     packageName: firrtl-diagrammer
     version: 1.6-SNAPSHOT
-  dsptools:
-    packageName: dsptools
-    version: 1.6-SNAPSHOT
   firrtl:
     packageName: firrtl
     version: 1.6-SNAPSHOT

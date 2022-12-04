@@ -6,10 +6,6 @@
 	path = firrtl
 	url = https://github.com/freechipsproject/firrtl.git
 	branch = master
-[submodule "dsptools"]
-	path = dsptools
-	url = https://github.com/ucb-bar/dsptools.git
-	branch = master
 [submodule "treadle"]
 	path = treadle
 	url = https://github.com/freechipsproject/treadle.git
