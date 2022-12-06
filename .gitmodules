@@ -1,20 +1,20 @@
 [submodule "chisel3"]
 	path = chisel3
 	url = https://github.com/freechipsproject/chisel3.git
-	branch = 3.6.x
+	branch = master
 [submodule "firrtl"]
 	path = firrtl
 	url = https://github.com/freechipsproject/firrtl.git
-	branch = 1.6.x
+	branch = master
 [submodule "treadle"]
 	path = treadle
 	url = https://github.com/freechipsproject/treadle.git
-	branch = 1.6.x
+	branch = master
 [submodule "diagrammer"]
 	path = diagrammer
 	url = https://github.com/freechipsproject/diagrammer
-	branch = 1.6.x
+	branch = master
 [submodule "chiseltest"]
 	path = chiseltest
 	url = git@github.com:ucb-bar/chiseltest.git
-	branch = 0.6.x
+	branch = main
