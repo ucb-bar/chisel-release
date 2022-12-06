@@ -1,16 +1,16 @@
 versions:
-  chiseltest:
-    packageName: chiseltest
-    version: 0.6-SNAPSHOT
   chisel3:
     packageName: chisel3
-    version: 3.6-SNAPSHOT
+    version: 3.6.0-M1
+  chiseltest:
+    packageName: chiseltest
+    version: 0.6.0-M1
   diagrammer:
     packageName: firrtl-diagrammer
-    version: 1.6-SNAPSHOT
+    version: 1.5.5-M1
   firrtl:
     packageName: firrtl
-    version: 1.6-SNAPSHOT
+    version: 1.6.0-M1
   treadle:
     packageName: treadle
-    version: 1.6-SNAPSHOT
+    version: 1.6.0-M1
