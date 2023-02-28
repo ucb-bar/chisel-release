@@ -1,16 +1,16 @@
 versions:
   chisel3:
     packageName: chisel3
-    version: 3.6.0-RC1
+    version: 3.6.0-RC2
   chiseltest:
     packageName: chiseltest
-    version: 0.6.0-RC1
+    version: 0.6.0-RC2
   diagrammer:
     packageName: firrtl-diagrammer
-    version: 1.6.0-RC1
+    version: 1.6.0-RC2
   firrtl:
     packageName: firrtl
-    version: 1.6.0-RC1
+    version: 1.6.0-RC2
   treadle:
     packageName: treadle
-    version: 1.6.0-RC1
+    version: 1.6.0-RC2
